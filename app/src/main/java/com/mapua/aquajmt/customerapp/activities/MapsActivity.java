@@ -3,14 +3,17 @@ package com.mapua.aquajmt.customerapp.activities;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageButton;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -31,8 +34,14 @@ import com.mapua.aquajmt.customerapp.R;
 
 @SuppressWarnings("MissingPermission")
 public class MapsActivity extends Activity implements OnMapReadyCallback,
-        View.OnClickListener, LocationListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        View.OnClickListener, LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, DrawerLayout.DrawerListener {
+
+    private static final int LIGHT_STATUS_BAR_FLAG =
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ?
+                    View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR : 0;
+    private static final int UI_FLAGS =
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
 
     private GoogleMap googleMap;
     private GoogleApiClient googleApiClient;
@@ -44,7 +53,14 @@ public class MapsActivity extends Activity implements OnMapReadyCallback,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            final Window window = getWindow();
+            window.getDecorView().setSystemUiVisibility(UI_FLAGS | LIGHT_STATUS_BAR_FLAG);
+            window.setStatusBarColor(Color.TRANSPARENT);
+        }
+
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayout.addDrawerListener(this);
 
         ImageButton btnDrawerToggle = (ImageButton) findViewById(R.id.btn_drawer_toggle);
         btnDrawerToggle.setOnClickListener(this);
@@ -124,4 +140,28 @@ public class MapsActivity extends Activity implements OnMapReadyCallback,
 
         LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
     }
+
+    @Override
+    public void onDrawerSlide(View drawerView, float slideOffset) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(Color.argb((int)(slideOffset * 255), 0, 0, 0));
+        }
+    }
+
+    @Override
+    public void onDrawerOpened(View drawerView) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().getDecorView().setSystemUiVisibility(UI_FLAGS);
+        }
+    }
+
+    @Override
+    public void onDrawerClosed(View drawerView) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().getDecorView().setSystemUiVisibility(UI_FLAGS | LIGHT_STATUS_BAR_FLAG);
+        }
+    }
+
+    @Override
+    public void onDrawerStateChanged(int newState) { }
 }
