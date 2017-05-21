@@ -1,36 +1,45 @@
-package com.mapua.aquajmt.customerapp;
+package com.mapua.aquajmt.customerapp.activities;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     private static final int LOCATION_PERMISSION_REQUEST = 100;
+
+    private boolean canStartApplication = false;
 
     @Override
     protected void onStart() {
         super.onStart();
+
+        checkLocationPermission();
     }
 
-    private void checkFineLocationPermission() {
+    private void goToMapActivity() {
+        if (canStartApplication) {
+            startActivity(new Intent(this, MapsActivity.class));
+            finish();
+        }
+    }
+
+    private void checkLocationPermission() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
 
             ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION
             }, LOCATION_PERMISSION_REQUEST);
+
+        } else {
+            canStartApplication = true;
+            goToMapActivity();
         }
     }
 
@@ -38,6 +47,13 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if ()
+        if (requestCode == LOCATION_PERMISSION_REQUEST) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                checkLocationPermission();
+            } else {
+                Toast.makeText(this, "This app needs to access your location.", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
     }
 }

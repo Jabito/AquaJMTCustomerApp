@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">CustomerApp</string>
+    <string name="app_name">Aqua</string>
+    <string name="txt_orders">Orders</string>
+    <string name="txt_payment_history">Payment History</string>
+    <string name="txt_settings">Settings</string>
+    <string name="txt_logout">Log out</string>
 </resources>
