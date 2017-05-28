@@ -17,26 +17,23 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-        <ImageButton
-            android:id="@+id/btn_drawer_toggle"
-            android:background="@android:color/transparent"
-            android:foreground="?android:selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_menu_black_s_white"
-            android:layout_margin="13dp"
-            android:scaleType="fitXY"
-            android:padding="10dp"
-            android:layout_width="50dp"
-            android:layout_height="50dp"/>
+        <FrameLayout
+            android:id="@+id/store_info_fragment_container"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="230dp"
+            android:layout_alignParentBottom="true"/>
 
         <RelativeLayout
-            android:paddingLeft="50dp"
-            android:paddingRight="50dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
             android:layout_marginBottom="55dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true">
 
             <GridLayout
+                android:id="@+id/ctrl_buttons"
                 android:clipToPadding="false"
                 android:padding="25dp"
                 android:layout_centerHorizontal="true"
@@ -44,6 +41,7 @@
                 android:layout_height="wrap_content">
 
                 <ImageButton
+                    android:id="@+id/btn_nearby_stores"
                     android:background="@drawable/circular_button"
                     android:foreground="@drawable/ripple_oval"
                     android:src="@drawable/ic_map_black"
@@ -54,6 +52,7 @@
                     android:layout_width="50dp"/>
 
                 <ImageButton
+                    android:id="@+id/btn_prev_store"
                     android:background="@drawable/circular_button"
                     android:foreground="@drawable/ripple_oval"
                     android:src="@drawable/ic_restore_black"
@@ -64,6 +63,7 @@
                     android:layout_width="50dp"/>
 
                 <ImageButton
+                    android:id="@+id/btn_go_to_location"
                     android:background="@drawable/circular_button"
                     android:foreground="@drawable/ripple_oval"
                     android:src="@drawable/ic_my_location_black"
