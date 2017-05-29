@@ -77,6 +77,12 @@ public class StoreInfoFragment extends Fragment implements View.OnClickListener 
             case R.id.btn_next_store:
                 mListener.goToNextStore();
                 break;
+            case R.id.btn_view_more:
+                mListener.viewAllStoreInfo();
+                break;
+            case R.id.btn_order:
+                mListener.orderFromStore();
+                break;
         }
     }
 
@@ -95,5 +101,7 @@ public class StoreInfoFragment extends Fragment implements View.OnClickListener 
     public interface StoreInfoFragmentListener {
         void goToPreviousStore();
         void goToNextStore();
+        void orderFromStore();
+        void viewAllStoreInfo();
     }
 }

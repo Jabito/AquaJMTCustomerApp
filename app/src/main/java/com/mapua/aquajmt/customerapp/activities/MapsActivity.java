@@ -1,5 +1,6 @@
 package com.mapua.aquajmt.customerapp.activities;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -62,6 +63,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static final int UI_FLAGS =
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+    private static final String CURRENT_STORE_CODE = "MapsActivity.CurrentStoreCode";
 
     private GoogleMap googleMap;
     private GoogleApiClient googleApiClient;
@@ -307,6 +309,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void goToNextStore() {
 
+    }
+
+    @Override
+    public void orderFromStore() {
+        // TODO: set the store code as an extra
+        Intent intent = new Intent(this, OrderActivity.class);
+        intent.putExtra(CURRENT_STORE_CODE, currentStoreInfo.getId());
+        startActivity(intent);
+    }
+
+    @Override
+    public void viewAllStoreInfo() {
+        // TODO: set the store code as an extra
+        Intent intent = new Intent(this, StoreInfoActivity.class);
+        intent.putExtra(CURRENT_STORE_CODE, currentStoreInfo.getId());
+        startActivity(intent);
     }
 
     @Override
