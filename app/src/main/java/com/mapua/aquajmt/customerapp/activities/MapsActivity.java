@@ -206,6 +206,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         googleMap.setOnMarkerClickListener(this);
         googleMap.setOnCameraIdleListener(this);
 
+        markerMapById.clear();
+        // TODO: retrieve nearby stores here and create markers for each of them
+        StoreInfo storeInfo = new StoreInfo("19928374", "Aqua Water Station (Muntinlupa Branch)",
+                getString(R.string.lorem_ipsum), getString(R.string.sample_address), 4.5f,
+                new LatLng(14.449353, 120.952437));
+
+        Marker marker = googleMap.addMarker(new MarkerOptions().position(storeInfo.getLocation())
+                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(R.mipmap.sample_image))));
+        marker.setTag(storeInfo);
+        marker.setVisible(false);
+        markerMapById.put(storeInfo.getId(), marker);
+
         googleApiClient.connect();
     }
 
@@ -230,18 +242,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onLocationChanged(Location location) {
-        markerMapById.clear();
-
-        // TODO: retrieve nearby stores here and create markers for each of them
-        StoreInfo storeInfo = new StoreInfo("19928374", "Aqua Water Station (Muntinlupa Branch)",
-                getString(R.string.lorem_ipsum), getString(R.string.sample_address), 4.5f,
-                new LatLng(14.449353, 120.952437));
-
-        Marker marker = googleMap.addMarker(new MarkerOptions().position(storeInfo.getLocation())
-                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(R.mipmap.sample_image))));
-        marker.setTag(storeInfo);
-        marker.setVisible(false);
-        markerMapById.put(storeInfo.getId(), marker);
+//        markerMapById.clear();
+//
+//        // TODO: retrieve nearby stores here and create markers for each of them
+//        StoreInfo storeInfo = new StoreInfo("19928374", "Aqua Water Station (Muntinlupa Branch)",
+//                getString(R.string.lorem_ipsum), getString(R.string.sample_address), 4.5f,
+//                new LatLng(14.449353, 120.952437));
+//
+//        Marker marker = googleMap.addMarker(new MarkerOptions().position(storeInfo.getLocation())
+//                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(R.mipmap.sample_image))));
+//        marker.setTag(storeInfo);
+//        marker.setVisible(false);
+//        markerMapById.put(storeInfo.getId(), marker);
 
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);

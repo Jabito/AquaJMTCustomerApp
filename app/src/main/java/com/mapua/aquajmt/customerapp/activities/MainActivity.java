@@ -23,7 +23,7 @@ public class MainActivity extends Activity {
 
     private void goToMapActivity() {
         if (canStartApplication) {
-            startActivity(new Intent(this, MapsActivity.class));
+            startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
     }

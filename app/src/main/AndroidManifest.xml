@@ -29,7 +29,8 @@
             android:theme="@style/AppTheme.Transparent" />
         <activity
             android:name=".activities.LoginActivity"
-            android:theme="@style/NoActionbarAppTheme" />
+            android:theme="@style/NoActionbarAppTheme"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".activities.OrderActivity"
             android:theme="@style/NoActionbarAppTheme" />
