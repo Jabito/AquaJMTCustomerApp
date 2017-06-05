@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="25dp"
+    tools:context="com.mapua.aquajmt.customerapp.activities.RegisterActivity">
+
+    <TextView
+        android:id="@+id/lbl_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:text="Register"
+        android:textSize="25sp"/>
+
+    <RelativeLayout
+        android:id="@id/form_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lbl_register">
+
+        <EditText
+            android:id="@+id/txt_username"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:fontFamily="sans-serif"
+            android:lines="1"
+            android:hint="Username"
+            android:inputType="textWebEmailAddress"
+            android:layout_marginBottom="10dp"/>
+
+        <EditText
+            android:id="@+id/txt_password"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:fontFamily="sans-serif"
+            android:lines="1"
+            android:inputType="textWebPassword"
+            android:hint="Password"
+            android:layout_below="@id/txt_username"
+            android:layout_marginBottom="10dp"/>
+
+        <EditText
+            android:id="@+id/txt_email"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:fontFamily="sans-serif"
+            android:lines="1"
+            android:hint="Email"
+            android:inputType="textWebEmailAddress"
+            android:layout_below="@id/txt_password"
+            android:layout_marginBottom="10dp"/>
+
+        <EditText
+            android:id="@+id/txt_full_name"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:fontFamily="sans-serif"
+            android:lines="1"
+            android:hint="Full name"
+            android:inputType="textPersonName"
+            android:layout_below="@id/txt_email"
+            android:layout_marginBottom="10dp"/>
+
+        <EditText
+            android:id="@+id/txt_contact_no"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:fontFamily="sans-serif"
+            android:lines="1"
+            android:hint="Primary contact no."
+            android:inputType="phone"
+            android:layout_below="@id/txt_full_name"
+            android:layout_marginBottom="25dp"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/txt_contact_no">
+
+            <Button
+                android:id="@+id/btn_signup"
+                android:text="Sign up"
+                android:background="@drawable/ripple_rectangle_color_primary"
+                android:textColor="@android:color/white"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:textAlignment="center"
+        android:text="Already have an account? Click here to log in."
+        android:maxWidth="200dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:layout_below="@id/form_container"/>
+
+</RelativeLayout>

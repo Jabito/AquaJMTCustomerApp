@@ -2,119 +2,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
-    tools:context="com.mapua.aquajmt.customerapp.fragments.StoreInfoFragment">
-
-    <ImageButton
-        android:id="@+id/btn_prev_store"
-        android:layout_width="30dp"
-        android:layout_height="match_parent"
-        android:tint="@android:color/darker_gray"
-        android:background="@drawable/ripple_rectangle"
-        android:src="@drawable/ic_chevron_left"
-        android:layout_alignParentStart="true"/>
-
-    <ImageButton
-        android:id="@+id/btn_next_store"
-        android:layout_width="30dp"
-        android:layout_height="match_parent"
-        android:tint="@android:color/darker_gray"
-        android:background="@drawable/ripple_rectangle"
-        android:src="@drawable/ic_chevron_right"
-        android:layout_alignParentEnd="true"/>
+    tools:context="com.mapua.aquajmt.customerapp.fragments.ShopInfoFragment">
 
     <RelativeLayout
         android:padding="15dp"
+        android:background="#ffffff"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_toStartOf="@id/btn_next_store"
-        android:layout_toEndOf="@id/btn_prev_store">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/txt_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#000"
-            android:textSize="18sp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="15dp"
-            android:layout_toStartOf="@+id/txt_rating"
-            tools:text="Aqua Water Station Muntinlupa Branch"/>
-
-        <TextView
-            android:id="@id/txt_rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toStartOf="@+id/img_star_rating"
-            android:layout_alignBaseline="@id/txt_name"
-            tools:text="4.3"/>
-
-        <ImageView
-            android:id="@id/img_star_rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:tint="@color/colorAccent"
-            android:src="@drawable/ic_star_black_s_white"
-            android:layout_alignTop="@id/txt_rating"
-            android:layout_alignBottom="@id/txt_rating"
-            android:layout_alignParentEnd="true"/>
-
-        <TextView
-            android:id="@+id/txt_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#6a6a6a"
-            android:textSize="12sp"
-            android:layout_marginBottom="12dp"
-            android:layout_below="@id/txt_name"
-            android:maxLines="2"
-            android:ellipsize="end"
-            tools:text="@string/sample_address"/>
-
-        <TextView
-            android:id="@+id/txt_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#2b2b2b"
-            android:textSize="12sp"
-            android:layout_marginBottom="12dp"
-            android:layout_below="@id/txt_address"
-            android:layout_above="@+id/container_buttons"
-            android:maxLines="4"
-            android:ellipsize="end"
-            tools:text="@string/lorem_ipsum"/>
+        <include layout="@layout/common_store_info_layout"/>
 
         <RelativeLayout
-            android:id="@id/container_buttons"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/txt_holidays_schedule">
 
-            <Button
-                android:id="@+id/btn_view_more"
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:text="View more"
-                android:textColor="#2d2d2d"
-                android:background="@android:color/darker_gray"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:padding="0dp"
-                android:layout_marginEnd="10dp"
-                android:layout_alignParentStart="true"/>
+            <LinearLayout
+                android:id="@+id/container_buttons"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true">
 
-            <Button
-                android:id="@+id/btn_order"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Order"
-                android:textColor="@android:color/white"
-                android:background="@color/colorPrimary"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:padding="0dp"
-                android:layout_toEndOf="@id/btn_view_more"
-                android:layout_alignParentEnd="true"/>
+                <Button
+                    android:id="@+id/btn_view_more"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="View more"
+                    android:textColor="#2d2d2d"
+                    android:background="@drawable/ripple_rectangle_color_gray"
+                    android:layout_weight="0.2"/>
+
+                <Space
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent" />
+
+                <Button
+                    android:id="@+id/btn_order"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Order"
+                    android:textColor="@android:color/white"
+                    android:background="@drawable/ripple_rectangle_color_primary"
+                    android:layout_weight="0.8"/>
+
+            </LinearLayout>
 
         </RelativeLayout>
 

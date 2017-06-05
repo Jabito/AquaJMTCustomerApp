@@ -30,11 +30,13 @@
         <activity
             android:name=".activities.LoginActivity"
             android:theme="@style/NoActionbarAppTheme"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".activities.OrderActivity"
+            android:name=".activities.RegisterActivity"
             android:theme="@style/NoActionbarAppTheme" />
-        <activity android:name=".activities.StoreInfoActivity"></activity>
+        <activity android:name=".activities.ShopInfoActivity" />
+        <activity android:name=".activities.PaymentHistoryActivity" />
+        <activity android:name=".activities.EditProfileActivity"></activity>
     </application>
 
 </manifest>

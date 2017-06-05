@@ -1,32 +1,25 @@
 package com.mapua.aquajmt.customerapp.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Point;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -44,10 +37,13 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mapua.aquajmt.customerapp.R;
-import com.mapua.aquajmt.customerapp.fragments.StoreInfoFragment;
-import com.mapua.aquajmt.customerapp.models.StoreInfo;
+import com.mapua.aquajmt.customerapp.fragments.OrderFragment;
+import com.mapua.aquajmt.customerapp.fragments.ShopInfoFragment;
+import com.mapua.aquajmt.customerapp.models.ShopInfo;
+import com.mapua.aquajmt.customerapp.utils.MapUtils;
 import com.mapua.aquajmt.customerapp.utils.VectorDrawableUtils;
 
+import java.util.Date;
 import java.util.HashMap;
 
 @SuppressWarnings("MissingPermission")
@@ -55,7 +51,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         View.OnClickListener, LocationListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, DrawerLayout.DrawerListener,
         GoogleMap.OnMarkerClickListener, GoogleMap.OnCameraIdleListener,
-        StoreInfoFragment.StoreInfoFragmentListener {
+        ShopInfoFragment.StoreInfoFragmentListener {
+
+    public static final int ORDER_FROM_STORE_REQUEST = 1;
+    public static final int VIEW_STORE_INFO_REQUEST = 2;
 
     private static final int LIGHT_STATUS_BAR_FLAG =
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ?
@@ -63,7 +62,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static final int UI_FLAGS =
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
-    private static final String CURRENT_STORE_CODE = "MapsActivity.CurrentStoreCode";
+
+    private static final String CURRENT_STORE_ID = "MapsActivity.CurrentStoreId";
 
     private GoogleMap googleMap;
     private GoogleApiClient googleApiClient;
@@ -77,12 +77,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ImageButton btnNearbyStores;
     private ImageButton btnPrevStore;
     private ImageButton btnGoToLocation;
+    private Button btnEditProfile;
+    private Button btnUserPaymentHistory;
+    private Button btnLogout;
 
     private View storeInfoFragmentContainer;
-    private StoreInfoFragment storeInfoFragment;
+    private ShopInfoFragment shopInfoFragment;
     private HashMap<String, Marker> markerMapById;
-    private StoreInfo currentStoreInfo;
+
+    private ShopInfo currentShopInfo;
     private int currentStoreIndex = 0;
+    private boolean isFromViewShopInfo = false;
 
     public MapsActivity() {
         this.markerMapById = new HashMap<>();
@@ -123,6 +128,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         btnPrevStore.setOnClickListener(this);
         btnGoToLocation.setOnClickListener(this);
 
+        btnEditProfile = (Button) findViewById(R.id.btn_edit_profile);
+        btnUserPaymentHistory = (Button) findViewById(R.id.btn_user_payment_history);
+        btnLogout = (Button) findViewById(R.id.btn_logout);
+
+        btnEditProfile.setOnClickListener(this);
+        btnUserPaymentHistory.setOnClickListener(this);
+        btnLogout.setOnClickListener(this);
+
         googleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -134,10 +147,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         storeInfoFragmentContainer = findViewById(R.id.store_info_fragment_container);
         if (storeInfoFragmentContainer != null && savedInstanceState == null) {
-            storeInfoFragment = new StoreInfoFragment();
+            shopInfoFragment = new ShopInfoFragment();
 
             getFragmentManager().beginTransaction()
-                    .add(R.id.store_info_fragment_container, storeInfoFragment)
+                    .add(R.id.store_info_fragment_container, shopInfoFragment)
                     .commit();
         }
     }
@@ -157,6 +170,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onPause() {
         if (storeInfoFragmentContainer.getVisibility() == View.VISIBLE) {
+            googleMap.setPadding(0, 0, 0, 0);
+
             storeInfoFragmentContainer.setVisibility(View.GONE);
             controlButtonsContainer.setVisibility(View.VISIBLE);
         }
@@ -171,19 +186,59 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode) {
+            case VIEW_STORE_INFO_REQUEST:
+                if (resultCode == RESULT_OK && currentShopInfo != null) {
+                    shopInfoFragment.setStoreInView(currentShopInfo);
+
+                    controlButtonsContainer.setVisibility(View.GONE);
+                    storeInfoFragmentContainer.setVisibility(View.VISIBLE);
+
+                    googleMap.setPadding(0, 0, 0, (int) TypedValue.applyDimension(
+                            TypedValue.COMPLEX_UNIT_DIP, 230, getResources().getDisplayMetrics()));
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLng(currentShopInfo.getLocation()));
+                }
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         switch(v.getId()) {
-            case R.id.btn_nearby_stores: {
+            case R.id.btn_nearby_stores:
                 break;
-            }
-            case R.id.btn_prev_store: {
+            case R.id.btn_prev_store:
                 break;
-            }
-            case R.id.btn_go_to_location: {
+            case R.id.btn_go_to_location:
                 LocationServices.FusedLocationApi.requestLocationUpdates(
                         googleApiClient, LocationRequest.create(), this);
                 break;
-            }
+            case R.id.btn_edit_profile:
+                startActivity(new Intent(this, EditProfileActivity.class));
+                break;
+            case R.id.btn_user_payment_history:
+                startActivity(new Intent(this, PaymentHistoryActivity.class));
+                break;
+            case R.id.btn_logout:
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                startActivity(new Intent(MapsActivity.this, LoginActivity.class));
+                                finish();
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                dialog.dismiss();
+                                break;
+                        }
+                    }
+                };
+                new AlertDialog.Builder(this)
+                        .setMessage("Are you sure you would like to log out?")
+                        .setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener)
+                        .show();
+                break;
         }
     }
 
@@ -208,30 +263,35 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         markerMapById.clear();
         // TODO: retrieve nearby stores here and create markers for each of them
-        StoreInfo storeInfo = new StoreInfo("19928374", "Aqua Water Station (Muntinlupa Branch)",
-                getString(R.string.lorem_ipsum), getString(R.string.sample_address), 4.5f,
-                new LatLng(14.449353, 120.952437));
+        ShopInfo shopInfo = new ShopInfo("19928374", "Aqua Water Station (Muntinlupa Branch)",
+                getString(R.string.sample_address),
+                new LatLng(14.449353, 120.952437), "", "", new Date(),
+                new Date(), true, true, "0111110", true, new Date(), new Date());
 
-        Marker marker = googleMap.addMarker(new MarkerOptions().position(storeInfo.getLocation())
-                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(R.mipmap.sample_image))));
-        marker.setTag(storeInfo);
+        Marker marker = googleMap.addMarker(new MarkerOptions().position(shopInfo.getLocation())
+                .icon(BitmapDescriptorFactory.fromBitmap(MapUtils.getMarkerBitmapFromView(this, R.mipmap.sample_image))));
+        marker.setTag(shopInfo);
         marker.setVisible(false);
-        markerMapById.put(storeInfo.getId(), marker);
+        markerMapById.put(shopInfo.getId(), marker);
 
         googleApiClient.connect();
     }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-        if (location != null) {
-            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
-            googleMap.animateCamera(cameraUpdate);
-        }
+        if (isFromViewShopInfo && currentShopInfo != null) {
+            setCurrentShopInfo(currentShopInfo);
+        } else {
+            Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+            if (location != null) {
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
+                googleMap.animateCamera(cameraUpdate);
+            }
 
-        LocationServices.FusedLocationApi.requestLocationUpdates(
-                googleApiClient, LocationRequest.create(), this);
+            LocationServices.FusedLocationApi.requestLocationUpdates(
+                    googleApiClient, LocationRequest.create(), this);
+        }
     }
 
     @Override
@@ -245,7 +305,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //        markerMapById.clear();
 //
 //        // TODO: retrieve nearby stores here and create markers for each of them
-//        StoreInfo storeInfo = new StoreInfo("19928374", "Aqua Water Station (Muntinlupa Branch)",
+//        ShopInfo storeInfo = new ShopInfo("19928374", "Aqua Water Station (Muntinlupa Branch)",
 //                getString(R.string.lorem_ipsum), getString(R.string.sample_address), 4.5f,
 //                new LatLng(14.449353, 120.952437));
 //
@@ -283,22 +343,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             return true;
 
         Object storeIdObject = marker.getTag();
-        if (storeIdObject != null && storeIdObject instanceof StoreInfo) {
-            StoreInfo storeInfo = (StoreInfo) storeIdObject;
-            storeInfoFragment.setStoreInView(storeInfo);
-            storeInfoFragment.setIsList(false);
+        if (storeIdObject != null && storeIdObject instanceof ShopInfo) {
+            ShopInfo shopInfo = (ShopInfo) storeIdObject;
+            setCurrentShopInfo(shopInfo);
 
-            controlButtonsContainer.setVisibility(View.GONE);
-            storeInfoFragmentContainer.setVisibility(View.VISIBLE);
-
-            googleMap.setPadding(0, 0, 0, (int) TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP, 230, getResources().getDisplayMetrics()));
-            googleMap.animateCamera(CameraUpdateFactory.newLatLng(storeInfo.getLocation()));
-
-            currentStoreInfo = storeInfo;
+            currentShopInfo = shopInfo;
         }
 
         return true;
+    }
+
+    private void setCurrentShopInfo(ShopInfo shopInfo) {
+        shopInfoFragment.setStoreInView(shopInfo);
+
+        controlButtonsContainer.setVisibility(View.GONE);
+        storeInfoFragmentContainer.setVisibility(View.VISIBLE);
+
+        googleMap.setPadding(0, 0, 0, (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 230, getResources().getDisplayMetrics()));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLng(shopInfo.getLocation()));
     }
 
     @Override
@@ -314,29 +377,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
-    public void goToPreviousStore() {
-
-    }
-
-    @Override
-    public void goToNextStore() {
-
-    }
-
-    @Override
     public void orderFromStore() {
-        // TODO: set the store code as an extra
-        Intent intent = new Intent(this, OrderActivity.class);
-        intent.putExtra(CURRENT_STORE_CODE, currentStoreInfo.getId());
-        startActivity(intent);
+        // TODO: set the store id as an extra
+        OrderFragment orderFragment = new OrderFragment();
+        orderFragment.show(getSupportFragmentManager(), "orderDialog");
     }
 
     @Override
     public void viewAllStoreInfo() {
-        // TODO: set the store code as an extra
-        Intent intent = new Intent(this, StoreInfoActivity.class);
-        intent.putExtra(CURRENT_STORE_CODE, currentStoreInfo.getId());
-        startActivity(intent);
+        // TODO: set the store id as an extra
+        Intent intent = new Intent(this, ShopInfoActivity.class);
+        intent.putExtra(CURRENT_STORE_ID, currentShopInfo.getId());
+        startActivityForResult(intent, VIEW_STORE_INFO_REQUEST);
     }
 
     @Override
@@ -345,10 +397,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             getWindow().setStatusBarColor(Color.argb((int)(slideOffset * 255), 0, 0, 0));
 
             if (slideOffset >= 0.5f) { // open
-                drawerToggle.getDrawerArrowDrawable().setColor(Color.WHITE);
+//                drawerToggle.getDrawerArrowDrawable().setColor(Color.WHITE);
                 getWindow().getDecorView().setSystemUiVisibility(UI_FLAGS);
             } else { // closed
-                drawerToggle.getDrawerArrowDrawable().setColor(Color.BLACK);
+//                drawerToggle.getDrawerArrowDrawable().setColor(Color.BLACK);
                 getWindow().getDecorView().setSystemUiVisibility(UI_FLAGS | LIGHT_STATUS_BAR_FLAG);
             }
         }
@@ -370,32 +422,4 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onDrawerStateChanged(int newState) { }
-
-    private Bitmap getMarkerBitmapFromView(@DrawableRes int resId) {
-        View view = getLayoutInflater().inflate(R.layout.store_badge_layout, null);
-        ImageView storeImageView = (ImageView) view.findViewById(R.id.img_store);
-
-        Bitmap storeImage = BitmapFactory.decodeResource(getResources(), resId);
-        RoundedBitmapDrawable storeImageDrawable = RoundedBitmapDrawableFactory
-                .create(getResources(), storeImage);
-        storeImageDrawable.setCircular(true);
-        storeImageView.setImageDrawable(storeImageDrawable);
-
-        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
-        view.buildDrawingCache();
-
-        Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(),
-                Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN);
-
-        Drawable backgroundDrawable = view.getBackground();
-        if (backgroundDrawable != null) {
-            backgroundDrawable.draw(canvas);
-        }
-        view.draw(canvas);
-
-        return bitmap;
-    }
 }

@@ -12,13 +12,14 @@
         android:layout_height="120dp"
         android:layout_centerHorizontal="true"
         android:background="@android:color/darker_gray"
+        android:src="@drawable/logo"
+        android:scaleType="centerCrop"
         android:layout_above="@+id/form_container"/>
 
     <RelativeLayout
         android:id="@id/form_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:paddingTop="50dp"
         android:layout_centerInParent="true">
 
@@ -28,6 +29,7 @@
             android:layout_height="45dp"
             android:lines="1"
             android:hint="Username"
+            android:fontFamily="sans-serif"
             android:inputType="textWebEmailAddress"
             android:layout_marginBottom="10dp"/>
 
@@ -36,16 +38,26 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:lines="1"
-            android:inputType="textWebPassword"
             android:hint="Password"
+            android:fontFamily="sans-serif"
+            android:inputType="textWebPassword"
             android:layout_below="@id/txt_username"
-            android:layout_marginBottom="25dp"/>
+            android:layout_marginBottom="10dp"/>
+
+        <TextView
+            android:id="@+id/lbl_acct_inaccessible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="Cannot access your account? Click here"
+            android:layout_below="@id/txt_password"/>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_below="@id/txt_password">
+            android:layout_marginTop="50dp"
+            android:layout_below="@id/lbl_acct_inaccessible">
 
             <Button
                 android:id="@+id/btn_login"
@@ -62,22 +74,15 @@
 
             <Button
                 android:id="@+id/btn_signup"
-                android:text="Sign up"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5"/>
+                android:layout_weight="0.5"
+                android:text="Sign up"
+                android:textColor="@color/colorPrimary"
+                android:background="@drawable/ripple_border_rect_color_primary"/>
 
         </LinearLayout>
 
     </RelativeLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAllCaps="true"
-        android:text="Forgot password"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
-        android:layout_below="@id/form_container"/>
 
 </RelativeLayout>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.mapua.aquajmt.customerapp.activities.EditProfileActivity">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:clipChildren="false"
+        android:background="@color/colorPrimaryDark">
+
+        <ImageView
+            android:layout_height="100dp"
+            android:layout_width="100dp"
+            android:scaleType="fitXY"
+            android:backgroundTint="#3EFFFFFF"
+            android:background="@drawable/ic_person_black_24dp"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@id/form_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="25dp"
+        android:layout_below="@id/header">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Username"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="16dp"
+            android:text="bmdelacruz"
+            android:layout_marginBottom="10dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Email"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="16dp"
+            android:text="bdshi13@gmail.com"
+            android:layout_marginBottom="10dp"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/lbl_full_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Full name"/>
+
+            <EditText
+                android:id="@+id/txt_full_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="16dp"
+                android:text="Bryan Dela Cruz"
+                android:maxLines="1"
+                android:layout_marginBottom="10dp"
+                android:layout_below="@id/lbl_full_name"/>
+
+            <!--<ImageButton-->
+                <!--android:id="@id/btn_edit_full_name"-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:background="@drawable/ripple_rectangle"-->
+                <!--android:src="@drawable/ic_mode_edit_black_24dp"-->
+                <!--android:tint="@android:color/darker_gray"-->
+                <!--android:layout_marginStart="10dp"-->
+                <!--android:layout_alignParentEnd="true"-->
+                <!--android:layout_alignTop="@id/lbl_full_name"-->
+                <!--android:layout_alignBottom="@id/txt_full_name"/>-->
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/lbl_primary_contact_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Primary Contact No."/>
+
+            <EditText
+                android:id="@+id/txt_primary_contact_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="16dp"
+                android:text="09165414338"
+                android:maxLines="1"
+                android:layout_marginBottom="10dp"
+                android:layout_below="@id/lbl_primary_contact_no"/>
+
+            <!--<ImageButton-->
+                <!--android:id="@id/btn_edit_primary_contact_no"-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:background="@drawable/ripple_rectangle"-->
+                <!--android:src="@drawable/ic_mode_edit_black_24dp"-->
+                <!--android:tint="@android:color/darker_gray"-->
+                <!--android:layout_marginStart="10dp"-->
+                <!--android:layout_alignParentEnd="true"-->
+                <!--android:layout_alignTop="@id/lbl_primary_contact_no"-->
+                <!--android:layout_alignBottom="@id/txt_primary_contact_no"/>-->
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -89,36 +89,37 @@
 
         <RelativeLayout
             android:id="@+id/aqua_logo_layout"
-            android:background="@color/colorDrawer"
             android:layout_marginBottom="15dp"
             android:layout_width="match_parent"
-            android:layout_height="140dp">
+            android:layout_height="200dp">
 
-            <TextView
-                android:text="Aqua Logo"
-                android:textSize="20sp"
-                android:textColor="@android:color/white"
-                android:padding="15dp"
+            <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"/>
+                android:layout_height="match_parent"
+                android:src="@drawable/logo"
+                android:scaleType="fitCenter"/>
 
         </RelativeLayout>
 
-        <GridLayout
+
+        <LinearLayout
             android:orientation="vertical"
             android:layout_below="@id/aqua_logo_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/btn_notifications"
-                android:text="Notifications"
-                style="@style/DrawerButtonStyle" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textSize="30sp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="10dp"/>
 
             <Button
-                android:id="@+id/btn_user_orders"
-                android:text="@string/txt_orders"
+                android:id="@+id/btn_edit_profile"
+                android:text="Edit Profile"
                 style="@style/DrawerButtonStyle" />
 
             <Button
@@ -126,12 +127,7 @@
                 android:text="@string/txt_payment_history"
                 style="@style/DrawerButtonStyle" />
 
-            <Button
-                android:id="@+id/btn_favorites"
-                android:text="Favorites"
-                style="@style/DrawerButtonStyle" />
-
-        </GridLayout>
+        </LinearLayout>
 
         <GridLayout
             android:orientation="vertical"
@@ -139,11 +135,6 @@
             android:layout_marginBottom="15dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true">
-
-            <Button
-                android:id="@+id/btn_settings"
-                android:text="@string/txt_settings"
-                style="@style/DrawerMinorButtonStyle" />
 
             <Button
                 android:id="@+id/btn_logout"

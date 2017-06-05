@@ -11,20 +11,16 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.mapua.aquajmt.customerapp.R;
-import com.mapua.aquajmt.customerapp.models.StoreInfo;
+import com.mapua.aquajmt.customerapp.models.ShopInfo;
 
-public class StoreInfoFragment extends Fragment implements View.OnClickListener {
+public class ShopInfoFragment extends Fragment implements View.OnClickListener {
 
     private StoreInfoFragmentListener mListener;
 
     private TextView txtName;
-    private TextView txtDescription;
     private TextView txtAddress;
-    private TextView txtRating;
-    private ImageButton btnPreviousStore;
-    private ImageButton btnNextStore;
 
-    public StoreInfoFragment() {
+    public ShopInfoFragment() {
         // Required empty public constructor
     }
 
@@ -34,17 +30,11 @@ public class StoreInfoFragment extends Fragment implements View.OnClickListener 
         View view = inflater.inflate(R.layout.fragment_store_info, container, false);
 
         txtName = (TextView) view.findViewById(R.id.txt_name);
-        txtDescription = (TextView) view.findViewById(R.id.txt_description);
         txtAddress = (TextView) view.findViewById(R.id.txt_address);
-        txtRating = (TextView) view.findViewById(R.id.txt_rating);
 
-        btnPreviousStore = (ImageButton) view.findViewById(R.id.btn_prev_store);
-        btnNextStore = (ImageButton) view.findViewById(R.id.btn_next_store);
         Button btnViewMore = (Button) view.findViewById(R.id.btn_view_more);
         Button btnOrder = (Button) view.findViewById(R.id.btn_order);
 
-        btnPreviousStore.setOnClickListener(this);
-        btnNextStore.setOnClickListener(this);
         btnViewMore.setOnClickListener(this);
         btnOrder.setOnClickListener(this);
 
@@ -71,12 +61,6 @@ public class StoreInfoFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
-            case R.id.btn_prev_store:
-                mListener.goToPreviousStore();
-                break;
-            case R.id.btn_next_store:
-                mListener.goToNextStore();
-                break;
             case R.id.btn_view_more:
                 mListener.viewAllStoreInfo();
                 break;
@@ -86,21 +70,12 @@ public class StoreInfoFragment extends Fragment implements View.OnClickListener 
         }
     }
 
-    public void setIsList(boolean isList) {
-        btnNextStore.setVisibility(isList ? View.VISIBLE : View.GONE);
-        btnPreviousStore.setVisibility(isList ? View.VISIBLE : View.GONE);
-    }
-
-    public void setStoreInView(StoreInfo storeInfo) {
-        txtName.setText(storeInfo.getName());
-        txtDescription.setText(storeInfo.getDescription());
-        txtAddress.setText(storeInfo.getAddress());
-        txtRating.setText(String.valueOf(storeInfo.getRating()));
+    public void setStoreInView(ShopInfo shopInfo) {
+        txtName.setText(shopInfo.getBusinessName());
+        txtAddress.setText(shopInfo.getAddress());
     }
 
     public interface StoreInfoFragmentListener {
-        void goToPreviousStore();
-        void goToNextStore();
         void orderFromStore();
         void viewAllStoreInfo();
     }
