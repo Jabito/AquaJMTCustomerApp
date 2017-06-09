@@ -6,10 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.IllegalFormatException;
 
-/**
- * Created by Bryan on 5/28/2017.
- */
-
 public class ShopInfo {
 
     private String id;
@@ -26,11 +22,12 @@ public class ShopInfo {
     private Boolean openOnHolidays;
     private Date createdOn;
     private Date updatedOn;
+    private String updatedBy;
 
     public ShopInfo(String id,
                     String businessName,
                     String address,
-                    LatLng location,
+                    LatLng location, // longitude:Float, latitude:Float
                     String cellphoneNo,
                     String alternateNo,
                     Date timeOpen,
@@ -40,13 +37,14 @@ public class ShopInfo {
                     String daysAvailable,
                     Boolean openOnHolidays,
                     Date createdOn,
-                    Date updatedOn) {
+                    Date updatedOn,
+                    String updatedBy) {
 
         if (id == null || businessName == null || address == null || location == null
                 || cellphoneNo == null || alternateNo == null || timeOpen == null
                 || timeClose == null || allowSwap == null || accountVerified == null
                 || daysAvailable == null || openOnHolidays == null || createdOn == null
-                || updatedOn == null || daysAvailable.length() != 7) {
+                || updatedOn == null || updatedBy == null || daysAvailable.length() != 7) {
             throw new IllegalArgumentException("Properties of this object is not allowed " +
                     "to contain null values.");
         }
@@ -65,6 +63,7 @@ public class ShopInfo {
         this.openOnHolidays = openOnHolidays;
         this.createdOn = createdOn;
         this.updatedOn = updatedOn;
+        this.updatedBy = updatedBy;
     }
 
     public String getId() {
@@ -195,5 +194,13 @@ public class ShopInfo {
 
     public void setUpdatedOn(Date updatedOn) {
         this.updatedOn = updatedOn;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
     }
 }
