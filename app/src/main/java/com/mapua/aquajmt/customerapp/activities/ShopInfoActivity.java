@@ -37,7 +37,6 @@ public class ShopInfoActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                setResult(RESULT_OK);
                 finish();
                 return true;
             default:

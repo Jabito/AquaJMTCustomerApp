@@ -21,7 +21,7 @@
             android:id="@+id/store_info_fragment_container"
             android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="230dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"/>
 
         <RelativeLayout
@@ -39,17 +39,6 @@
                 android:layout_centerHorizontal="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
-
-                <ImageButton
-                    android:id="@+id/btn_nearby_stores"
-                    android:background="@drawable/circular_button"
-                    android:foreground="@drawable/ripple_oval"
-                    android:src="@drawable/ic_map_black"
-                    android:elevation="5dp"
-                    android:padding="25dp"
-                    android:layout_margin="10dp"
-                    android:layout_height="50dp"
-                    android:layout_width="50dp"/>
 
                 <ImageButton
                     android:id="@+id/btn_prev_store"

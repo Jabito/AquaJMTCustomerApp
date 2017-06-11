@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -31,20 +33,21 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mapua.aquajmt.customerapp.R;
+import com.mapua.aquajmt.customerapp.api.ApiService;
+import com.mapua.aquajmt.customerapp.api.MockApiServiceImpl;
 import com.mapua.aquajmt.customerapp.fragments.OrderFragment;
 import com.mapua.aquajmt.customerapp.fragments.ShopInfoFragment;
 import com.mapua.aquajmt.customerapp.models.ShopInfo;
-import com.mapua.aquajmt.customerapp.utils.MapUtils;
 import com.mapua.aquajmt.customerapp.utils.VectorDrawableUtils;
 
-import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 @SuppressWarnings("MissingPermission")
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
@@ -74,12 +77,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ActionBarDrawerToggle drawerToggle;
 
     private View controlButtonsContainer;
-    private ImageButton btnNearbyStores;
     private ImageButton btnPrevStore;
     private ImageButton btnGoToLocation;
     private Button btnEditProfile;
     private Button btnUserPaymentHistory;
     private Button btnLogout;
+
+    private ApiService apiService;
 
     private View storeInfoFragmentContainer;
     private ShopInfoFragment shopInfoFragment;
@@ -120,11 +124,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         controlButtonsContainer = findViewById(R.id.ctrl_buttons);
-        btnNearbyStores = ((ImageButton) findViewById(R.id.btn_nearby_stores));
         btnPrevStore = ((ImageButton) findViewById(R.id.btn_prev_store));
         btnGoToLocation = ((ImageButton) findViewById(R.id.btn_go_to_location));
 
-        btnNearbyStores.setOnClickListener(this);
         btnPrevStore.setOnClickListener(this);
         btnGoToLocation.setOnClickListener(this);
 
@@ -153,6 +155,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .add(R.id.store_info_fragment_container, shopInfoFragment)
                     .commit();
         }
+
+        apiService = MockApiServiceImpl.getInstance();
     }
 
     @Override
@@ -170,8 +174,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onPause() {
         if (storeInfoFragmentContainer.getVisibility() == View.VISIBLE) {
-            googleMap.setPadding(0, 0, 0, 0);
-
             storeInfoFragmentContainer.setVisibility(View.GONE);
             controlButtonsContainer.setVisibility(View.VISIBLE);
         }
@@ -186,27 +188,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch(requestCode) {
-            case VIEW_STORE_INFO_REQUEST:
-                if (resultCode == RESULT_OK && currentShopInfo != null) {
-                    shopInfoFragment.setStoreInView(currentShopInfo);
-
-                    controlButtonsContainer.setVisibility(View.GONE);
-                    storeInfoFragmentContainer.setVisibility(View.VISIBLE);
-
-                    googleMap.setPadding(0, 0, 0, (int) TypedValue.applyDimension(
-                            TypedValue.COMPLEX_UNIT_DIP, 230, getResources().getDisplayMetrics()));
-                    googleMap.animateCamera(CameraUpdateFactory.newLatLng(currentShopInfo.getLocation()));
-                }
-        }
-    }
-
-    @Override
     public void onClick(View v) {
         switch(v.getId()) {
-            case R.id.btn_nearby_stores:
-                break;
             case R.id.btn_prev_store:
                 break;
             case R.id.btn_go_to_location:
@@ -254,26 +237,30 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(final GoogleMap googleMap) {
         this.googleMap = googleMap;
         googleMap.getUiSettings().setCompassEnabled(false);
         googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_json));
         googleMap.setOnMarkerClickListener(this);
         googleMap.setOnCameraIdleListener(this);
 
-        markerMapById.clear();
-//        // TODO: retrieve nearby stores here and create markers for each of them
-//        ShopInfo shopInfo = new ShopInfo("19928374", "Aqua Water Station (Muntinlupa Branch)",
-//                getString(R.string.sample_address),
-//                new LatLng(14.449353, 120.952437), "", "", new Date(),
-//                new Date(), true, true, "0111110", true, new Date(), new Date());
-//
-//        Marker marker = googleMap.addMarker(new MarkerOptions().position(shopInfo.getLocation())
-//                .icon(BitmapDescriptorFactory.fromBitmap(MapUtils.getMarkerBitmapFromView(this, R.mipmap.sample_image))));
-//        marker.setTag(shopInfo);
-//        marker.setVisible(false);
-//        markerMapById.put(shopInfo.getId(), marker);
+        storeInfoFragmentContainer.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Rect rect = new Rect();
+                getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+                int statusBarHeight = rect.top;
 
+                if (storeInfoFragmentContainer.getVisibility() == View.VISIBLE) {
+                    googleMap.setPadding(0, statusBarHeight, 0, storeInfoFragmentContainer.getHeight());
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLng(currentShopInfo.getLocation()));
+                } else {
+                    googleMap.setPadding(0, statusBarHeight, 0, 0);
+                }
+            }
+        });
+
+        markerMapById.clear();
         googleApiClient.connect();
     }
 
@@ -302,20 +289,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onLocationChanged(Location location) {
-//        markerMapById.clear();
-//
-//        // TODO: retrieve nearby stores here and create markers for each of them
-//        ShopInfo storeInfo = new ShopInfo("19928374", "Aqua Water Station (Muntinlupa Branch)",
-//                getString(R.string.lorem_ipsum), getString(R.string.sample_address), 4.5f,
-//                new LatLng(14.449353, 120.952437));
-//
-//        Marker marker = googleMap.addMarker(new MarkerOptions().position(storeInfo.getLocation())
-//                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(R.mipmap.sample_image))));
-//        marker.setTag(storeInfo);
-//        marker.setVisible(false);
-//        markerMapById.put(storeInfo.getId(), marker);
-
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
         googleMap.animateCamera(cameraUpdate);
 
@@ -332,8 +307,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onCameraIdle() {
-        for (Marker m : markerMapById.values()) {
-            m.setVisible(true);
+        final LatLngBounds latLngBounds = googleMap.getProjection().getVisibleRegion().latLngBounds;
+        List<ShopInfo> shops = apiService.getShopsAt(latLngBounds);
+
+        for (ShopInfo shopInfo : shops) {
+            if (markerMapById.containsKey(shopInfo.getId()))
+                continue;
+
+            Marker marker = googleMap.addMarker(new MarkerOptions().position(shopInfo.getLocation())
+                    .icon(VectorDrawableUtils.createBitmapDescriptor(getResources(),
+                            R.drawable.ic_local_cafe_35dp_primary_dark, getTheme())));
+            marker.setTag(shopInfo);
+            markerMapById.put(shopInfo.getId(), marker);
         }
     }
 
@@ -346,31 +331,30 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (storeIdObject != null && storeIdObject instanceof ShopInfo) {
             ShopInfo shopInfo = (ShopInfo) storeIdObject;
             setCurrentShopInfo(shopInfo);
-
-            currentShopInfo = shopInfo;
         }
 
         return true;
     }
 
     private void setCurrentShopInfo(ShopInfo shopInfo) {
-        shopInfoFragment.setStoreInView(shopInfo);
+        if (shopInfo != null) {
+            currentShopInfo = shopInfo;
+            shopInfoFragment.setStoreInView(shopInfo);
 
-        controlButtonsContainer.setVisibility(View.GONE);
-        storeInfoFragmentContainer.setVisibility(View.VISIBLE);
-
-        googleMap.setPadding(0, 0, 0, (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, 230, getResources().getDisplayMetrics()));
-        googleMap.animateCamera(CameraUpdateFactory.newLatLng(shopInfo.getLocation()));
+            controlButtonsContainer.setVisibility(View.GONE);
+            storeInfoFragmentContainer.setVisibility(View.VISIBLE);
+        } else {
+            storeInfoFragmentContainer.setVisibility(View.GONE);
+            controlButtonsContainer.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void onBackPressed() {
-        if (storeInfoFragmentContainer.getVisibility() == View.VISIBLE) {
-            googleMap.setPadding(0, 0, 0, 0);
-
-            storeInfoFragmentContainer.setVisibility(View.GONE);
-            controlButtonsContainer.setVisibility(View.VISIBLE);
+        if (shopInfoFragment.getMoreStoreInfoVisibility()) {
+            shopInfoFragment.setMoreStoreInfoVisibility(false);
+        } else if (storeInfoFragmentContainer.getVisibility() == View.VISIBLE) {
+            setCurrentShopInfo(null);
         } else {
             super.onBackPressed();
         }
@@ -397,10 +381,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             getWindow().setStatusBarColor(Color.argb((int)(slideOffset * 255), 0, 0, 0));
 
             if (slideOffset >= 0.5f) { // open
-//                drawerToggle.getDrawerArrowDrawable().setColor(Color.WHITE);
                 getWindow().getDecorView().setSystemUiVisibility(UI_FLAGS);
             } else { // closed
-//                drawerToggle.getDrawerArrowDrawable().setColor(Color.BLACK);
                 getWindow().getDecorView().setSystemUiVisibility(UI_FLAGS | LIGHT_STATUS_BAR_FLAG);
             }
         }

@@ -1,6 +1,7 @@
 package com.mapua.aquajmt.customerapp.api;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.mapua.aquajmt.customerapp.models.ShopInfo;
 import com.mapua.aquajmt.customerapp.utils.DateTimeUtils;
 
@@ -14,9 +15,10 @@ import java.util.List;
  * Created by Bryan on 6/11/2017.
  */
 
-public class ApiService {
+public class MockApiServiceImpl implements ApiService {
 
-    public static HashMap<String, ShopInfo> shops;
+    private static MockApiServiceImpl instance;
+    private static HashMap<String, ShopInfo> shops;
 
     static {
         shops = new HashMap<>();
@@ -57,8 +59,28 @@ public class ApiService {
         }
     }
 
+    public static ApiService getInstance() {
+        if (instance == null)
+            instance = new MockApiServiceImpl();
+        return instance;
+    }
+
+    private MockApiServiceImpl() { }
+
     public List<ShopInfo> getShopsAt(LatLng location, float radius) {
         return new ArrayList<>(shops.values());
+    }
+
+    @Override
+    public List<ShopInfo> getShopsAt(LatLngBounds latLngBounds) {
+        ArrayList<ShopInfo> filteredShopInfo = new ArrayList<>();
+        for (ShopInfo shopInfo : shops.values()) {
+            if (latLngBounds.contains(shopInfo.getLocation())) {
+                filteredShopInfo.add(shopInfo);
+            }
+        }
+
+        return filteredShopInfo;
     }
 
     public ShopInfo getShopInfo(String id) {
