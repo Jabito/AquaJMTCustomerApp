@@ -262,17 +262,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         googleMap.setOnCameraIdleListener(this);
 
         markerMapById.clear();
-        // TODO: retrieve nearby stores here and create markers for each of them
-        ShopInfo shopInfo = new ShopInfo("19928374", "Aqua Water Station (Muntinlupa Branch)",
-                getString(R.string.sample_address),
-                new LatLng(14.449353, 120.952437), "", "", new Date(),
-                new Date(), true, true, "0111110", true, new Date(), new Date());
-
-        Marker marker = googleMap.addMarker(new MarkerOptions().position(shopInfo.getLocation())
-                .icon(BitmapDescriptorFactory.fromBitmap(MapUtils.getMarkerBitmapFromView(this, R.mipmap.sample_image))));
-        marker.setTag(shopInfo);
-        marker.setVisible(false);
-        markerMapById.put(shopInfo.getId(), marker);
+//        // TODO: retrieve nearby stores here and create markers for each of them
+//        ShopInfo shopInfo = new ShopInfo("19928374", "Aqua Water Station (Muntinlupa Branch)",
+//                getString(R.string.sample_address),
+//                new LatLng(14.449353, 120.952437), "", "", new Date(),
+//                new Date(), true, true, "0111110", true, new Date(), new Date());
+//
+//        Marker marker = googleMap.addMarker(new MarkerOptions().position(shopInfo.getLocation())
+//                .icon(BitmapDescriptorFactory.fromBitmap(MapUtils.getMarkerBitmapFromView(this, R.mipmap.sample_image))));
+//        marker.setTag(shopInfo);
+//        marker.setVisible(false);
+//        markerMapById.put(shopInfo.getId(), marker);
 
         googleApiClient.connect();
     }
