@@ -97,6 +97,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private int currentStoreIndex = 0;
     private boolean isFromViewShopInfo = false;
+    private LatLng currentLocation;
 
     public MapsActivity() {
         this.markerMapById = new HashMap<>();
@@ -295,6 +296,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onLocationChanged(Location location) {
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        currentLocation = latLng;
 
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
         googleMap.animateCamera(cameraUpdate);
@@ -344,7 +346,35 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onBackPressed() {
-        if (shopInfoFragment.getMoreStoreInfoVisibility()) {
+        final OrderFragment orderFragment = (OrderFragment) getSupportFragmentManager()
+                .findFragmentByTag("orderDialog");
+        OrderConfirmationFragment orderConfirmationFragment =
+                (OrderConfirmationFragment) getSupportFragmentManager()
+                        .findFragmentByTag("orderConfirmationDialog");
+
+        if (orderConfirmationFragment != null) {
+            orderConfirmationFragment.goBackToOrderForm();
+        } else if (orderFragment != null) {
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case DialogInterface.BUTTON_POSITIVE:
+                            dialog.dismiss();
+                            orderFragment.dismiss();
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            dialog.dismiss();
+                            break;
+                    }
+                }
+            };
+
+            new AlertDialog.Builder(this)
+                    .setMessage("Are you sure you would like cancel ordering?")
+                    .setPositiveButton("Yes", dialogClickListener)
+                    .setNegativeButton("No", dialogClickListener)
+                    .show();
+        } else if (shopInfoFragment.getMoreStoreInfoVisibility()) {
             shopInfoFragment.setMoreStoreInfoVisibility(false);
         } else if (storeInfoFragmentContainer.getVisibility() == View.VISIBLE) {
             setCurrentShopInfo(null, null);
@@ -356,17 +386,28 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void orderFromStore() {
         if (currentShopInfo != null) {
-            OrderFragment orderFragment = OrderFragment.newInstance(
-                    currentShopInfo, currentShopSalesInfo);
+            OrderFragment orderFragment = OrderFragment.newInstance(currentShopInfo, currentShopSalesInfo);
             orderFragment.show(getSupportFragmentManager(), "orderDialog");
         }
     }
 
     @Override
-    public void confirmOrder(OrderForm orderForm) {
+    public void confirmOrder(ShopInfo shopInfo, ShopSalesInfo shopSalesInfo, OrderForm orderForm) {
         OrderConfirmationFragment orderConfirmationFragment =
-                OrderConfirmationFragment.newInstance(orderForm);
+                OrderConfirmationFragment.newInstance(shopInfo, shopSalesInfo, orderForm);
         orderConfirmationFragment.show(getSupportFragmentManager(), "orderConfirmationDialog");
+    }
+
+    @Override
+    public void goBackToOrderForm(ShopInfo shopInfo, ShopSalesInfo shopSalesInfo, OrderForm orderForm) {
+        OrderFragment orderFragment = OrderFragment.newInstance(
+                shopInfo, shopSalesInfo, orderForm);
+        orderFragment.show(getSupportFragmentManager(), "orderDialog");
+    }
+
+    @Override
+    public LatLng getCurrentLocation() {
+        return currentLocation;
     }
 
     @Override

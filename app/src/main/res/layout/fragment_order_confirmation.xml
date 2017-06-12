@@ -4,4 +4,299 @@
     android:layout_height="match_parent"
     tools:context="com.mapua.aquajmt.customerapp.fragments.OrderConfirmationFragment">
 
+    <RelativeLayout
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/container_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp">
+
+            <TextView
+                android:id="@+id/txt_ordering_from"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="#4F4F4F"
+                android:layout_marginBottom="8dp"
+                tools:text="@string/sample_order_from_text"/>
+
+            <TextView
+                android:id="@+id/lbl_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"
+                android:layout_below="@id/txt_ordering_from"
+                android:text="@string/lbl_total_price"/>
+
+            <TextView
+                android:id="@+id/txt_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_alignBaseline="@id/lbl_price"
+                android:layout_toEndOf="@id/lbl_price"
+                tools:text="PHP 125.00"/>
+
+            <TextView
+                android:id="@+id/lbl_water_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_water_type"
+                android:textSize="14sp"
+                android:layout_marginEnd="10dp"
+                android:layout_below="@id/lbl_price"/>
+
+            <TextView
+                android:id="@+id/txt_water_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#4F4F4F"
+                android:layout_alignBaseline="@id/lbl_water_type"
+                android:layout_toEndOf="@id/lbl_water_type"
+                tools:text="Alkaline"/>
+
+            <TextView
+                android:id="@+id/lbl_is_swapping"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_is_swapping"
+                android:textSize="14sp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="15dp"
+                android:layout_below="@id/lbl_water_type"/>
+
+            <TextView
+                android:id="@+id/txt_is_swapping"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#4F4F4F"
+                android:layout_alignBaseline="@id/lbl_is_swapping"
+                android:layout_toEndOf="@id/lbl_is_swapping"
+                tools:text="Yes"/>
+
+            <RelativeLayout
+                android:id="@+id/container_round"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_below="@id/lbl_is_swapping">
+
+                <ImageView
+                    android:id="@+id/img_container_round"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@mipmap/ic_container_round"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"/>
+
+                <TextView
+                    android:id="@+id/lbl_container_round"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/txt_round_container"
+                    android:layout_marginBottom="2dp"
+                    android:layout_alignTop="@id/img_container_round"
+                    android:layout_toEndOf="@id/img_container_round"/>
+
+                <TextView
+                    android:id="@+id/txt_container_round_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_marginBottom="5dp"
+                    android:layout_alignBaseline="@id/lbl_container_round"
+                    android:layout_alignParentEnd="true"
+                    tools:text="PHP 25.00"/>
+
+                <TextView
+                    android:id="@+id/lbl_container_round_count"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Quantity"
+                    android:textStyle="italic"
+                    android:paddingEnd="3dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_below="@id/lbl_container_round"
+                    android:layout_alignStart="@id/lbl_container_round"/>
+
+                <TextView
+                    android:id="@+id/txt_container_round_count"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:textColor="#4F4F4F"
+                    android:layout_alignBaseline="@id/lbl_container_round_count"
+                    android:layout_toEndOf="@id/lbl_container_round_count"
+                    tools:text="4"/>
+
+                <TextView
+                    android:id="@+id/lbl_container_round_subtotal"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Subtotal"
+                    android:paddingEnd="3dp"
+                    android:textStyle="italic"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_below="@id/lbl_container_round_count"
+                    android:layout_alignStart="@id/lbl_container_round"/>
+
+                <TextView
+                    android:id="@+id/txt_container_round_subtotal"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:textColor="#4F4F4F"
+                    android:layout_alignBaseline="@id/lbl_container_round_subtotal"
+                    android:layout_toEndOf="@id/lbl_container_round_subtotal"
+                    tools:text="PHP 100.00"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/container_slim"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_below="@id/container_round">
+
+                <ImageView
+                    android:id="@+id/img_container_slim"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@mipmap/ic_container_slim"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"/>
+
+                <TextView
+                    android:id="@+id/lbl_container_slim"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/txt_slim_container"
+                    android:layout_marginBottom="2dp"
+                    android:layout_alignTop="@id/img_container_slim"
+                    android:layout_toEndOf="@id/img_container_slim"/>
+
+                <TextView
+                    android:id="@+id/txt_container_slim_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_marginBottom="5dp"
+                    android:layout_alignBaseline="@id/lbl_container_slim"
+                    android:layout_alignParentEnd="true"
+                    tools:text="PHP 25.00"/>
+
+                <TextView
+                    android:id="@+id/lbl_container_slim_count"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Quantity"
+                    android:textStyle="italic"
+                    android:paddingEnd="3dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_below="@id/lbl_container_slim"
+                    android:layout_alignStart="@id/lbl_container_slim"/>
+
+                <TextView
+                    android:id="@+id/txt_container_slim_count"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:textColor="#4F4F4F"
+                    android:layout_alignBaseline="@id/lbl_container_slim_count"
+                    android:layout_toEndOf="@id/lbl_container_slim_count"
+                    tools:text="4"/>
+
+                <TextView
+                    android:id="@+id/lbl_container_slim_subtotal"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Subtotal"
+                    android:textStyle="italic"
+                    android:paddingEnd="3dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_below="@id/lbl_container_slim_count"
+                    android:layout_alignStart="@id/lbl_container_slim"/>
+
+                <TextView
+                    android:id="@+id/txt_container_slim_subtotal"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:textColor="#4F4F4F"
+                    android:layout_alignBaseline="@id/lbl_container_slim_subtotal"
+                    android:layout_toEndOf="@id/lbl_container_slim_subtotal"
+                    tools:text="PHP 100.00"/>
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/lbl_delivery_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delivery details"
+                android:labelFor="@+id/txt_delivery_details"
+                android:layout_marginEnd="10dp"
+                android:layout_below="@id/container_slim"/>
+
+            <EditText
+                android:id="@id/txt_delivery_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:textSize="14sp"
+                android:layout_marginBottom="5dp"
+                android:layout_below="@id/lbl_delivery_details"/>
+
+            <TextView
+                android:id="@+id/lbl_delivery_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delivery address"
+                android:labelFor="@+id/txt_delivery_address"
+                android:layout_marginEnd="10dp"
+                android:layout_below="@id/txt_delivery_details"/>
+
+            <EditText
+                android:id="@id/txt_delivery_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:textSize="14sp"
+                android:layout_below="@id/lbl_delivery_address"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/container_content">
+
+            <RelativeLayout
+                android:id="@+id/container_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/btn_confirm_order"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp"
+                    android:text="@string/lbl_confirm_order"
+                    android:textColor="@android:color/white"
+                    android:background="@drawable/ripple_rectangle_color_primary"
+                    android:layout_alignParentEnd="true"/>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
 </FrameLayout>

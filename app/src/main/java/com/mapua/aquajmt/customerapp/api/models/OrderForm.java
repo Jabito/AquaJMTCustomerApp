@@ -18,6 +18,7 @@ public class OrderForm implements Parcelable {
     private String waterType; // as is
     private int slimOrdered; // as is
     private int roundOrdered; // as is
+    private boolean isSwapping;
 
     public OrderForm() {
     }
@@ -31,6 +32,7 @@ public class OrderForm implements Parcelable {
         waterType = in.readString();
         slimOrdered = in.readInt();
         roundOrdered = in.readInt();
+        isSwapping = in.readByte() != 0;
     }
 
     public static final Creator<OrderForm> CREATOR = new Creator<OrderForm>() {
@@ -109,6 +111,14 @@ public class OrderForm implements Parcelable {
         this.roundOrdered = roundOrdered;
     }
 
+    public boolean isSwapping() {
+        return isSwapping;
+    }
+
+    public void setSwapping(boolean swapping) {
+        isSwapping = swapping;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -124,5 +134,6 @@ public class OrderForm implements Parcelable {
         dest.writeString(waterType);
         dest.writeInt(slimOrdered);
         dest.writeInt(roundOrdered);
+        dest.writeByte((byte) (isSwapping ? 1 : 0));
     }
 }

@@ -1,36 +1,73 @@
 package com.mapua.aquajmt.customerapp.fragments;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.mapua.aquajmt.customerapp.R;
 import com.mapua.aquajmt.customerapp.api.models.OrderForm;
+import com.mapua.aquajmt.customerapp.models.ShopInfo;
+import com.mapua.aquajmt.customerapp.models.ShopSalesInfo;
 
+import java.util.Locale;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class OrderConfirmationFragment extends DialogFragment {
 
     public interface OrderConfirmationFragmentListener {
+        void goBackToOrderForm(ShopInfo shopInfo, ShopSalesInfo shopSalesInfo, OrderForm orderForm);
+        LatLng getCurrentLocation();
         void orderSucceeded();
         void orderFailed();
     }
 
+    private static final String SHOP_INFO_PARAM = "shop_info_param";
+    private static final String SHOP_SALES_INFO_PARAM = "shop_sales_info_param";
     private static final String ORDER_FORM_PARAM = "order_form_param";
 
+    @BindView(R.id.txt_ordering_from) TextView txtOrderingFrom;
+    @BindView(R.id.txt_water_type) TextView txtWaterType;
+    @BindView(R.id.txt_is_swapping) TextView txtIsSwapping;
+    @BindView(R.id.txt_price) TextView txtPrice;
+    @BindView(R.id.txt_delivery_details) EditText txtDeliveryDetails;
+    @BindView(R.id.txt_delivery_address) EditText txtDeliveryAddress;
+
+    @BindView(R.id.container_round) View containerRound;
+    @BindView(R.id.txt_container_round_price) TextView txtContainerRoundPrice;
+    @BindView(R.id.txt_container_round_count) TextView txtContainerRoundCount;
+    @BindView(R.id.txt_container_round_subtotal) TextView txtContainerRoundSubtotal;
+
+    @BindView(R.id.container_slim) View containerSlim;
+    @BindView(R.id.txt_container_slim_price) TextView txtContainerSlimPrice;
+    @BindView(R.id.txt_container_slim_count) TextView txtContainerSlimCount;
+    @BindView(R.id.txt_container_slim_subtotal) TextView txtContainerSlimSubtotal;
+
     private OrderConfirmationFragmentListener mListener;
+    private ShopInfo shopInfo;
+    private ShopSalesInfo shopSalesInfo;
     private OrderForm orderForm;
 
     public OrderConfirmationFragment() {
         // Required empty public constructor
     }
 
-    public static OrderConfirmationFragment newInstance(OrderForm orderForm) {
+    public static OrderConfirmationFragment newInstance(ShopInfo shopInfo,
+            ShopSalesInfo shopSalesInfo, OrderForm orderForm) {
         OrderConfirmationFragment fragment = new OrderConfirmationFragment();
         Bundle args = new Bundle();
+        args.putParcelable(SHOP_INFO_PARAM, shopInfo);
+        args.putParcelable(SHOP_SALES_INFO_PARAM, shopSalesInfo);
         args.putParcelable(ORDER_FORM_PARAM, orderForm);
         fragment.setArguments(args);
         return fragment;
@@ -40,12 +77,26 @@ public class OrderConfirmationFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            shopInfo = getArguments().getParcelable(SHOP_INFO_PARAM);
+            shopSalesInfo = getArguments().getParcelable(SHOP_SALES_INFO_PARAM);
             orderForm = getArguments().getParcelable(ORDER_FORM_PARAM);
 
-            if (orderForm == null)
-                throw new IllegalStateException("The orderForm object cannot be null.");
+            if (orderForm == null || shopInfo == null || shopSalesInfo == null)
+                throw new IllegalStateException("The objects shopInfo, shopSalesInfo, " +
+                        "and orderForm object cannot be null.");
         } else
             throw new IllegalArgumentException("No arguments supplied to this fragment.");
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return new Dialog(getActivity(), getTheme()) {
+            @Override
+            public void onBackPressed() {
+                getActivity().onBackPressed();
+            }
+        };
     }
 
     @Override
@@ -72,5 +123,76 @@ public class OrderConfirmationFragment extends DialogFragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        setViews();
+    }
+
+    @OnClick(R.id.btn_confirm_order)
+    public void confirmOrder() {
+        orderForm.setDeliveryAddress(txtDeliveryAddress.getText().toString());
+        orderForm.setDeliveryDetails(txtDeliveryDetails.getText().toString());
+        orderForm.setDeliveryLocation(mListener.getCurrentLocation());
+    }
+
+    public void goBackToOrderForm() {
+        mListener.goBackToOrderForm(shopInfo, shopSalesInfo, orderForm);
+        dismiss();
+    }
+
+    private void setViews() {
+        txtOrderingFrom.setText(getString(R.string.order_from_text_format,
+                shopInfo.getBusinessName()));
+
+        txtIsSwapping.setText(orderForm.isSwapping() ? "Yes" : "No");
+
+        containerRound.setVisibility(
+                shopSalesInfo.isRoundOffered() ? View.VISIBLE : View.GONE);
+        containerSlim.setVisibility(
+                shopSalesInfo.isSlimOffered() ? View.VISIBLE : View.GONE);
+
+        double containerPrice;
+        switch(orderForm.getWaterType()) {
+            case OrderFragment.ALKALINE_STR:
+                containerPrice = shopSalesInfo.getAlkalinePrice();
+                break;
+            case OrderFragment.DISTILLED_STR:
+                containerPrice = shopSalesInfo.getDistilledPrice();
+                break;
+            case OrderFragment.PURIFIED_STR:
+                containerPrice = shopSalesInfo.getPurifiedPrice();
+                break;
+            case OrderFragment.MINERAL_STR:
+                containerPrice = shopSalesInfo.getMineralPrice();
+                break;
+            default:
+                throw new AssertionError("Unknown water type.");
+        }
+
+        String price = String.format(Locale.getDefault(), "PHP %.2f", containerPrice);
+
+        txtContainerRoundPrice.setText(price);
+        txtContainerSlimPrice.setText(price);
+
+        txtContainerRoundCount.setText(String.format(Locale.getDefault(),
+                "%d", orderForm.getRoundOrdered()));
+        txtContainerSlimCount.setText(String.format(Locale.getDefault(),
+                "%d", orderForm.getSlimOrdered()));
+
+        double roundSubtotal = containerPrice * orderForm.getRoundOrdered();
+        double slimSubtotal = containerPrice * orderForm.getSlimOrdered();
+        double total = roundSubtotal + slimSubtotal;
+
+        txtPrice.setText(String.format(Locale.getDefault(), "PHP %.2f", total));
+        txtContainerRoundSubtotal.setText(String.format(
+                Locale.getDefault(), "PHP %.2f", roundSubtotal));
+        txtContainerSlimSubtotal.setText(String.format(
+                Locale.getDefault(), "PHP %.2f", slimSubtotal));
+
+        txtWaterType.setText(orderForm.getWaterType());
     }
 }

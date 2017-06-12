@@ -1,8 +1,10 @@
 package com.mapua.aquajmt.customerapp.fragments;
 
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
@@ -32,15 +34,16 @@ import butterknife.OnClick;
 public class OrderFragment extends DialogFragment {
 
     public interface OrderFragmentListener {
-        void confirmOrder(OrderForm orderForm);
+        void confirmOrder(ShopInfo shopInfo, ShopSalesInfo shopSalesInfo, OrderForm orderForm);
     }
 
     private static final String SHOP_INFO_PARAM = "shop_info_param";
     private static final String SHOP_SALES_INFO_PARAM = "shop_sales_info_param";
-    private static final String ALKALINE_STR = "Alkaline";
-    private static final String PURIFIED_STR = "Purified";
-    private static final String DISTILLED_STR = "Distilled";
-    private static final String MINERAL_STR = "Mineral";
+    private static final String ORDER_FORM_PARAM = "order_form_param";
+    public static final String ALKALINE_STR = "Alkaline";
+    public static final String PURIFIED_STR = "Purified";
+    public static final String DISTILLED_STR = "Distilled";
+    public static final String MINERAL_STR = "Mineral";
 
     @BindView(R.id.txt_ordering_from) TextView txtOrderingFrom;
     @BindView(R.id.txt_price) TextView txtPrice;
@@ -58,6 +61,7 @@ public class OrderFragment extends DialogFragment {
     private OrderFragmentListener mListener;
     private ShopInfo shopInfo;
     private ShopSalesInfo shopSalesInfo;
+    private OrderForm orderForm;
 
     private double totalPrice = 0.0;
     private double containerPrice = 0.0;
@@ -75,6 +79,16 @@ public class OrderFragment extends DialogFragment {
         return orderFragment;
     }
 
+    public static OrderFragment newInstance(ShopInfo shopInfo, ShopSalesInfo shopSalesInfo, OrderForm orderForm) {
+        OrderFragment orderFragment = new OrderFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(SHOP_INFO_PARAM, shopInfo);
+        args.putParcelable(SHOP_SALES_INFO_PARAM, shopSalesInfo);
+        args.putParcelable(ORDER_FORM_PARAM, orderForm);
+        orderFragment.setArguments(args);
+        return orderFragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,12 +96,24 @@ public class OrderFragment extends DialogFragment {
         if (getArguments() != null) {
             shopInfo = getArguments().getParcelable(SHOP_INFO_PARAM);
             shopSalesInfo = getArguments().getParcelable(SHOP_SALES_INFO_PARAM);
+            orderForm = getArguments().getParcelable(ORDER_FORM_PARAM);
 
             if (shopSalesInfo == null || shopInfo == null)
                 throw new IllegalStateException("The shopInfo or the shopSalesInfo object " +
                         "cannot be null.");
         } else
             throw new IllegalArgumentException("No arguments supplied to this fragment.");
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return new Dialog(getActivity(), getTheme()) {
+            @Override
+            public void onBackPressed() {
+                getActivity().onBackPressed();
+            }
+        };
     }
 
     @Override
@@ -121,8 +147,7 @@ public class OrderFragment extends DialogFragment {
         super.onStart();
 
         try {
-            setShopInfoInView(shopInfo);
-            setShopSalesInfoInView(shopSalesInfo);
+            setViews();
 
             spnrWaterType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -180,12 +205,14 @@ public class OrderFragment extends DialogFragment {
     @OnClick(R.id.btn_order)
     public void order() {
         OrderForm orderForm = new OrderForm();
+        orderForm.setCustomerId(""); // TODO: set this when the login api integration is ready
         orderForm.setStoreId(shopInfo.getId());
-        orderForm.setWaterType(((String) spnrWaterType.getSelectedItem()).toUpperCase());
+        orderForm.setWaterType((String) spnrWaterType.getSelectedItem());
         orderForm.setRoundOrdered(getCountFromTextView(txtContainerRoundCount));
         orderForm.setSlimOrdered(getCountFromTextView(txtContainerSlimCount));
+        orderForm.setSwapping(chkSwapContainers.isChecked());
 
-        mListener.confirmOrder(orderForm);
+        mListener.confirmOrder(shopInfo, shopSalesInfo, orderForm);
         dismiss();
     }
 
@@ -238,21 +265,18 @@ public class OrderFragment extends DialogFragment {
         return count;
     }
 
-    private void setShopInfoInView(ShopInfo shopInfo) {
+    private void setViews() throws NoOfferedContainersException, NoOfferedWaterTypesException {
         txtOrderingFrom.setText(getString(R.string.order_from_text_format,
                 shopInfo.getBusinessName()));
         chkSwapContainers.setEnabled(shopInfo.isAllowSwap());
-    }
 
-    private void setShopSalesInfoInView(ShopSalesInfo shopSalesInfo) throws NoOfferedContainersException, NoOfferedWaterTypesException {
         containerRound.setVisibility(
                 shopSalesInfo.isRoundOffered() ? View.VISIBLE : View.GONE);
         containerSlim.setVisibility(
                 shopSalesInfo.isSlimOffered() ? View.VISIBLE : View.GONE);
 
-        if (!shopSalesInfo.isRoundOffered() && !shopSalesInfo.isSlimOffered()) {
+        if (!shopSalesInfo.isRoundOffered() && !shopSalesInfo.isSlimOffered())
             throw new NoOfferedContainersException();
-        }
 
         ArrayList<String> waterTypes = new ArrayList<>();
         if (shopSalesInfo.isAlkalineAvailable())
@@ -271,8 +295,19 @@ public class OrderFragment extends DialogFragment {
 
         if (waterTypes.size() >= 1)
             spnrWaterType.setSelection(0);
-        else {
+        else
             throw new NoOfferedWaterTypesException();
+
+        if (orderForm != null) {
+            int index = waterTypes.indexOf(orderForm.getWaterType());
+            spnrWaterType.setSelection(index);
+
+            chkSwapContainers.setChecked(orderForm.isSwapping());
+
+            txtContainerRoundCount.setText(String.format(
+                    Locale.getDefault(), "%d", orderForm.getRoundOrdered()));
+            txtContainerSlimCount.setText(String.format(
+                    Locale.getDefault(), "%d", orderForm.getSlimOrdered()));
         }
     }
 
