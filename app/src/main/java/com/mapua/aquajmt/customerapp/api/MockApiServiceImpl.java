@@ -62,12 +62,12 @@ public class MockApiServiceImpl implements ApiService {
                     "5036 Malolos St., Makati, 1207 Metro Manila",
                     new LatLng(14.570862, 121.017774),
                     "09165414338", "4172897",
-                    DateTimeUtils.parseTime("07:00:00"),
-                    DateTimeUtils.parseTime("21:00:00"),
+                    DateTimeUtils.parseTime("00:00:00"),
+                    DateTimeUtils.parseTime("23:59:59"),
                     true, true, "1111111", true, 0.0,
                     new Date(), new Date(), "bdshi13"));
             shopSalesInfo.put(id, new ShopSalesInfo(id,
-                    false, false, 20, 20,
+                    true, true, 20, 20,
                     true, true, true, true,
                     25.0, 25.0, 25.0, 30.0, 30.0, 30.0,
                     new Date(), new Date(), ""));

@@ -41,6 +41,7 @@ public class ShopInfoFragment extends Fragment {
     @BindView(R.id.img_fourth_star) ImageView imgFourthStar;
     @BindView(R.id.img_fifth_star) ImageView imgFifthStar;
 
+    @BindView(R.id.btn_order) Button btnOrder;
     @BindView(R.id.btn_more_info) Button btnMoreInfo;
     @BindView(R.id.more_store_info) View moreStoreInfo;
 
@@ -108,10 +109,12 @@ public class ShopInfoFragment extends Fragment {
             txtIsOpenStatus.setText(getString(R.string.store_status_open));
             txtIsOpenStatus.setTextColor(ContextCompat.getColor(getActivity(),
                     android.R.color.holo_green_dark));
+            btnOrder.setEnabled(true);
         } else {
             txtIsOpenStatus.setText(getString(R.string.store_status_closed));
             txtIsOpenStatus.setTextColor(ContextCompat.getColor(getActivity(),
                     android.R.color.holo_red_dark));
+            btnOrder.setEnabled(false);
         }
 
         float rating = (float) shopInfo.getRating();

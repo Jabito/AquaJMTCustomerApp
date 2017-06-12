@@ -173,9 +173,9 @@ public class OrderFragment extends DialogFragment {
                     }
 
                     txtContainerRoundPrice.setText(String.format(
-                            Locale.getDefault(), "PHP %.2f", containerPrice));
+                            Locale.getDefault(), getString(R.string.php_price_format), containerPrice));
                     txtContainerSlimPrice.setText(String.format(
-                            Locale.getDefault(), "PHP %.2f", containerPrice));
+                            Locale.getDefault(), getString(R.string.php_price_format), containerPrice));
 
                     updateTotalPriceText();
                 }
@@ -204,12 +204,21 @@ public class OrderFragment extends DialogFragment {
 
     @OnClick(R.id.btn_order)
     public void order() {
+        int roundCount = getCountFromTextView(txtContainerRoundCount);
+        int slimCount = getCountFromTextView(txtContainerSlimCount);
+
+        if (roundCount == 0 && slimCount == 0) {
+            Toast.makeText(getActivity(), "You aren't ordering anything.",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         OrderForm orderForm = new OrderForm();
         orderForm.setCustomerId(""); // TODO: set this when the login api integration is ready
         orderForm.setStoreId(shopInfo.getId());
         orderForm.setWaterType((String) spnrWaterType.getSelectedItem());
-        orderForm.setRoundOrdered(getCountFromTextView(txtContainerRoundCount));
-        orderForm.setSlimOrdered(getCountFromTextView(txtContainerSlimCount));
+        orderForm.setRoundOrdered(roundCount);
+        orderForm.setSlimOrdered(slimCount);
         orderForm.setSwapping(chkSwapContainers.isChecked());
 
         mListener.confirmOrder(shopInfo, shopSalesInfo, orderForm);
@@ -252,7 +261,7 @@ public class OrderFragment extends DialogFragment {
         totalPrice = getCountFromTextView(txtContainerRoundCount) * containerPrice;
         totalPrice += getCountFromTextView(txtContainerSlimCount) * containerPrice;
 
-        txtPrice.setText(String.format(Locale.getDefault(), "%.2f", totalPrice));
+        txtPrice.setText(String.format(Locale.getDefault(), getString(R.string.php_price_format), totalPrice));
     }
 
     private int getCountFromTextView(EditText editText) {
