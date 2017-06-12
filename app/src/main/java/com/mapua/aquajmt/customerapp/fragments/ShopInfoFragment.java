@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.mapua.aquajmt.customerapp.R;
 import com.mapua.aquajmt.customerapp.models.ShopInfo;
+import com.mapua.aquajmt.customerapp.models.ShopSalesInfo;
 import com.mapua.aquajmt.customerapp.utils.DateTimeUtils;
 import com.mapua.aquajmt.customerapp.utils.ShopInfoUtils;
 
@@ -26,10 +27,7 @@ public class ShopInfoFragment extends Fragment {
 
     public interface StoreInfoFragmentListener {
         void orderFromStore();
-        void viewAllStoreInfo();
     }
-
-    private StoreInfoFragmentListener mListener;
 
     @BindView(R.id.txt_name) TextView txtName;
     @BindView(R.id.txt_address) TextView txtAddress;
@@ -45,7 +43,6 @@ public class ShopInfoFragment extends Fragment {
 
     @BindView(R.id.btn_more_info) Button btnMoreInfo;
     @BindView(R.id.more_store_info) View moreStoreInfo;
-    private boolean isMoreStoreInfoShown = false;
 
     @BindView(R.id.txt_schedule) TextView txtSchedule;
     @BindView(R.id.txt_holidays_schedule) TextView txtHolidaysSchedule;
@@ -55,6 +52,10 @@ public class ShopInfoFragment extends Fragment {
     @BindView(R.id.badge_alkaline_water_type) View badgeAlkalineWaterType;
     @BindView(R.id.badge_distilled_water_type) View badgeDistilledWaterType;
     @BindView(R.id.badge_purified_water_type) View badgePurifiedWaterType;
+    @BindView(R.id.badge_mineral_water_type) View badgeMineralWaterType;
+
+    private StoreInfoFragmentListener mListener;
+    private boolean isMoreStoreInfoShown = false;
 
     public ShopInfoFragment() {
         // Required empty public constructor
@@ -96,6 +97,9 @@ public class ShopInfoFragment extends Fragment {
     }
 
     public void setStoreInView(ShopInfo shopInfo) {
+        if (shopInfo == null)
+            throw new IllegalStateException("The shopInfo cannot be null.");
+
         txtName.setText(shopInfo.getBusinessName());
         txtAddress.setText(shopInfo.getAddress());
         txtContactNo.setText(shopInfo.getCellphoneNo());
@@ -110,7 +114,7 @@ public class ShopInfoFragment extends Fragment {
                     android.R.color.holo_red_dark));
         }
 
-        float rating = 4.3f; // TODO: remove this hardcoded value
+        float rating = (float) shopInfo.getRating();
         txtRating.setText(String.format(Locale.getDefault(), "%.2f", rating));
         String stars = ShopInfoUtils.getStars(rating);
         setStar(imgFirstStar, stars.charAt(0));
@@ -124,7 +128,7 @@ public class ShopInfoFragment extends Fragment {
                 DateTimeUtils.stringifyTime(shopInfo.getTimeOpen()),
                 DateTimeUtils.stringifyTime(shopInfo.getTimeClose())));
 
-        if (shopInfo.getOpenOnHolidays())
+        if (shopInfo.isOpenOnHolidays())
             txtHolidaysSchedule.setText(getString(R.string.store_open_holidays));
         else
             txtHolidaysSchedule.setText(getString(R.string.store_closed_holidays));
@@ -133,6 +137,25 @@ public class ShopInfoFragment extends Fragment {
             txtOtherContactNo.setText(shopInfo.getAlternateNo());
         else
             txtOtherContactNo.setText(getString(R.string.txt_no_other_contact_no));
+    }
+
+    public void setShopSalesInView(ShopSalesInfo shopSalesInfo) {
+        if (shopSalesInfo == null)
+            throw new IllegalStateException("The shopSalesInfo cannot be null.");
+
+        badgeRoundContainer.setVisibility(
+                shopSalesInfo.isRoundOffered() ? View.VISIBLE : View.GONE);
+        badgeSlimContainer.setVisibility(
+                shopSalesInfo.isSlimOffered() ? View.VISIBLE : View.GONE);
+
+        badgeAlkalineWaterType.setVisibility(
+                shopSalesInfo.isAlkalineAvailable() ? View.VISIBLE : View.GONE);
+        badgeDistilledWaterType.setVisibility(
+                shopSalesInfo.isDistilledAvailable() ? View.VISIBLE : View.GONE);
+        badgeMineralWaterType.setVisibility(
+                shopSalesInfo.isMineralAvailable() ? View.VISIBLE : View.GONE);
+        badgePurifiedWaterType.setVisibility(
+                shopSalesInfo.isPurifiedAvailable() ? View.VISIBLE : View.GONE);
     }
 
     public boolean getMoreStoreInfoVisibility() {

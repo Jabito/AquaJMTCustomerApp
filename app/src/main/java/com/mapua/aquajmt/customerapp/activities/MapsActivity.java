@@ -41,9 +41,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.mapua.aquajmt.customerapp.R;
 import com.mapua.aquajmt.customerapp.api.ApiService;
 import com.mapua.aquajmt.customerapp.api.MockApiServiceImpl;
+import com.mapua.aquajmt.customerapp.api.models.OrderForm;
 import com.mapua.aquajmt.customerapp.fragments.OrderFragment;
 import com.mapua.aquajmt.customerapp.fragments.ShopInfoFragment;
 import com.mapua.aquajmt.customerapp.models.ShopInfo;
+import com.mapua.aquajmt.customerapp.models.ShopSalesInfo;
 import com.mapua.aquajmt.customerapp.utils.VectorDrawableUtils;
 
 import java.util.HashMap;
@@ -54,7 +56,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         View.OnClickListener, LocationListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, DrawerLayout.DrawerListener,
         GoogleMap.OnMarkerClickListener, GoogleMap.OnCameraIdleListener,
-        ShopInfoFragment.StoreInfoFragmentListener {
+        ShopInfoFragment.StoreInfoFragmentListener, OrderFragment.OrderFragmentListener {
 
     public static final int ORDER_FROM_STORE_REQUEST = 1;
     public static final int VIEW_STORE_INFO_REQUEST = 2;
@@ -90,6 +92,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private HashMap<String, Marker> markerMapById;
 
     private ShopInfo currentShopInfo;
+    private ShopSalesInfo currentShopSalesInfo;
+
     private int currentStoreIndex = 0;
     private boolean isFromViewShopInfo = false;
 
@@ -266,8 +270,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        if (isFromViewShopInfo && currentShopInfo != null) {
-            setCurrentShopInfo(currentShopInfo);
+        if (isFromViewShopInfo && currentShopInfo != null && currentShopSalesInfo != null) {
+            setCurrentShopInfo(currentShopInfo, currentShopSalesInfo);
         } else {
             Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
             if (location != null) {
@@ -330,23 +334,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Object storeIdObject = marker.getTag();
         if (storeIdObject != null && storeIdObject instanceof ShopInfo) {
             ShopInfo shopInfo = (ShopInfo) storeIdObject;
-            setCurrentShopInfo(shopInfo);
+            ShopSalesInfo shopSalesInfo = apiService.getShopSalesInfo(shopInfo.getId()); // TODO: put in asynctask
+            setCurrentShopInfo(shopInfo, shopSalesInfo);
         }
 
         return true;
-    }
-
-    private void setCurrentShopInfo(ShopInfo shopInfo) {
-        if (shopInfo != null) {
-            currentShopInfo = shopInfo;
-            shopInfoFragment.setStoreInView(shopInfo);
-
-            controlButtonsContainer.setVisibility(View.GONE);
-            storeInfoFragmentContainer.setVisibility(View.VISIBLE);
-        } else {
-            storeInfoFragmentContainer.setVisibility(View.GONE);
-            controlButtonsContainer.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override
@@ -354,7 +346,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (shopInfoFragment.getMoreStoreInfoVisibility()) {
             shopInfoFragment.setMoreStoreInfoVisibility(false);
         } else if (storeInfoFragmentContainer.getVisibility() == View.VISIBLE) {
-            setCurrentShopInfo(null);
+            setCurrentShopInfo(null, null);
         } else {
             super.onBackPressed();
         }
@@ -362,17 +354,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void orderFromStore() {
-        // TODO: set the store id as an extra
-        OrderFragment orderFragment = new OrderFragment();
-        orderFragment.show(getSupportFragmentManager(), "orderDialog");
+        if (currentShopInfo != null) {
+            OrderFragment orderFragment = OrderFragment.initialize(
+                    currentShopInfo, currentShopSalesInfo);
+            orderFragment.show(getSupportFragmentManager(), "orderDialog");
+        }
     }
 
     @Override
-    public void viewAllStoreInfo() {
-        // TODO: set the store id as an extra
-        Intent intent = new Intent(this, ShopInfoActivity.class);
-        intent.putExtra(CURRENT_STORE_ID, currentShopInfo.getId());
-        startActivityForResult(intent, VIEW_STORE_INFO_REQUEST);
+    public void order(OrderForm orderForm) {
+
     }
 
     @Override
@@ -404,4 +395,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onDrawerStateChanged(int newState) { }
+
+    private void setCurrentShopInfo(ShopInfo shopInfo, ShopSalesInfo shopSalesInfo) {
+        if (shopInfo != null) {
+            currentShopInfo = shopInfo;
+            currentShopSalesInfo = shopSalesInfo;
+            shopInfoFragment.setStoreInView(shopInfo);
+            shopInfoFragment.setShopSalesInView(shopSalesInfo);
+
+            controlButtonsContainer.setVisibility(View.GONE);
+            storeInfoFragmentContainer.setVisibility(View.VISIBLE);
+        } else {
+            storeInfoFragmentContainer.setVisibility(View.GONE);
+            controlButtonsContainer.setVisibility(View.VISIBLE);
+        }
+    }
 }

@@ -176,7 +176,7 @@
             android:id="@+id/lbl_offered_containers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Offered containers"
+            android:text="@string/lbl_offered_containers"
             android:layout_marginBottom="5dp"
             android:layout_below="@id/lbl_other_contact_no"/>
 
@@ -204,7 +204,7 @@
                     android:layout_height="wrap_content"
                     android:textAlignment="textEnd"
                     android:layout_margin="10dp"
-                    android:text="Round container"
+                    android:text="@string/txt_round_container"
                     android:layout_alignParentBottom="true"/>
 
             </RelativeLayout>
@@ -229,7 +229,7 @@
                     android:layout_height="wrap_content"
                     android:textAlignment="textEnd"
                     android:layout_margin="10dp"
-                    android:text="Slim container"
+                    android:text="@string/txt_slim_container"
                     android:layout_alignParentBottom="true"/>
 
             </RelativeLayout>
@@ -240,7 +240,7 @@
             android:id="@+id/lbl_offered_water_types"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Offered water types"
+            android:text="@string/lbl_offered_water_types"
             android:layout_marginBottom="5dp"
             android:layout_below="@id/container_containers"/>
 
@@ -264,6 +264,11 @@
             <TextView
                 android:id="@+id/badge_purified_water_type"
                 android:text="@string/txt_purified"
+                style="@style/water_type_badge" />
+
+            <TextView
+                android:id="@+id/badge_mineral_water_type"
+                android:text="@string/txt_mineral"
                 style="@style/water_type_badge" />
 
         </LinearLayout>

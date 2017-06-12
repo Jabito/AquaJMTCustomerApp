@@ -3,6 +3,7 @@ package com.mapua.aquajmt.customerapp.api;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.mapua.aquajmt.customerapp.models.ShopInfo;
+import com.mapua.aquajmt.customerapp.models.ShopSalesInfo;
 
 import java.util.List;
 
@@ -17,4 +18,6 @@ public interface ApiService {
     List<ShopInfo> getShopsAt(LatLngBounds latLngBounds);
 
     ShopInfo getShopInfo(String id);
+
+    ShopSalesInfo getShopSalesInfo(String id);
 }

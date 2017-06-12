@@ -5,7 +5,6 @@
     tools:context="com.mapua.aquajmt.customerapp.fragments.OrderFragment">
 
     <RelativeLayout
-        android:padding="15dp"
         android:background="#ffffff"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -13,7 +12,8 @@
         <RelativeLayout
             android:id="@+id/container_content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="15dp">
 
             <TextView
                 android:id="@+id/txt_ordering_from"
@@ -22,7 +22,7 @@
                 android:textSize="16sp"
                 android:textColor="#4F4F4F"
                 android:layout_marginBottom="8dp"
-                android:text="Order from Aqua Water Station Muntinlupa Branch"/>
+                tools:text="@string/sample_order_from_text"/>
 
             <TextView
                 android:id="@+id/lbl_price"
@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:layout_below="@id/txt_ordering_from"
-                android:text="Total price"/>
+                android:text="@string/lbl_total_price"/>
 
             <TextView
                 android:id="@+id/txt_price"
@@ -42,140 +42,189 @@
                 android:layout_marginBottom="15dp"
                 tools:text="PHP 125.00"/>
 
-            <ImageView
-                android:id="@+id/img_container_round"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@mipmap/ic_container_round"
-                android:layout_marginBottom="15dp"
-                android:layout_marginEnd="10dp"
-                android:layout_below="@id/txt_price"/>
-
-            <ImageView
-                android:id="@+id/img_container_slim"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@mipmap/ic_container_slim"
-                android:layout_marginBottom="15dp"
-                android:layout_marginEnd="10dp"
-                android:layout_below="@id/img_container_round"/>
-
             <TextView
-                android:id="@+id/lbl_container_round"
-                android:layout_width="wrap_content"
+                android:id="@+id/lbl_water_type"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Round countainer"
+                android:textSize="14sp"
+                android:layout_below="@id/txt_price"
+                android:text="@string/lbl_water_type"/>
+
+            <Spinner
+                android:id="@+id/spnr_water_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
                 android:layout_marginBottom="5dp"
-                android:layout_alignTop="@id/img_container_round"
-                android:layout_toEndOf="@id/img_container_round"
-                android:layout_alignParentEnd="true"/>
+                android:layout_below="@id/lbl_water_type"
+                tools:listitem="@android:layout/simple_spinner_item"/>
 
-            <TextView
-                android:id="@+id/lbl_container_slim"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/container_round"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Slim countainer"
-                android:layout_marginBottom="5dp"
-                android:layout_alignTop="@id/img_container_slim"
-                android:layout_toEndOf="@id/img_container_slim"
-                android:layout_alignParentEnd="true"/>
+                android:layout_below="@id/spnr_water_type">
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/lbl_container_round"
-                android:layout_toEndOf="@id/img_container_round"
-                android:layout_alignBottom="@id/img_container_round"
-                android:layout_alignParentEnd="true">
+                <ImageView
+                    android:id="@+id/img_container_round"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@mipmap/ic_container_round"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="10dp"/>
 
-                <ImageButton
-                    android:id="@+id/btn_container_round_count_dec"
-                    android:layout_height="match_parent"
-                    android:layout_width="50dp"
-                    android:layout_weight="0.1"
-                    android:src="@drawable/ic_chevron_left"
-                    android:background="@drawable/ripple_rectangle_color_gray"/>
-
-                <Space
-                    android:layout_width="10dp"
-                    android:layout_height="match_parent" />
-
-                <EditText
-                    android:id="@+id/txt_container_round_count"
+                <TextView
+                    android:id="@+id/lbl_container_round"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.8"
-                    android:inputType="number"
-                    android:background="@android:color/transparent"
-                    android:textAlignment="center"
-                    android:text="0"/>
+                    android:layout_height="wrap_content"
+                    android:text="@string/txt_round_container"
+                    android:layout_marginBottom="2dp"
+                    android:layout_alignTop="@id/img_container_round"
+                    android:layout_toEndOf="@id/img_container_round"
+                    android:layout_alignParentEnd="true"/>
 
-                <Space
-                    android:layout_width="10dp"
-                    android:layout_height="match_parent" />
-
-                <ImageButton
-                    android:id="@+id/btn_container_round_count_inc"
-                    android:layout_height="match_parent"
-                    android:layout_width="50dp"
-                    android:layout_weight="0.1"
-                    android:src="@drawable/ic_chevron_right"
-                    android:background="@drawable/ripple_rectangle_color_gray"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/lbl_container_slim"
-                android:layout_toEndOf="@id/img_container_slim"
-                android:layout_alignBottom="@id/img_container_slim"
-                android:layout_alignParentEnd="true">
-
-                <ImageButton
-                    android:id="@+id/btn_container_slim_count_dec"
-                    android:layout_height="match_parent"
-                    android:layout_width="50dp"
-                    android:layout_weight="0.1"
-                    android:src="@drawable/ic_chevron_left"
-                    android:background="@drawable/ripple_rectangle_color_gray"/>
-
-                <Space
-                    android:layout_width="10dp"
-                    android:layout_height="match_parent" />
-
-                <EditText
-                    android:id="@+id/txt_container_slim_count"
+                <TextView
+                    android:id="@+id/txt_container_round_price"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.8"
-                    android:inputType="number"
-                    android:background="@android:color/transparent"
-                    android:textAlignment="center"
-                    android:text="0"/>
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_marginBottom="5dp"
+                    android:layout_alignBaseline="@id/lbl_container_round"
+                    android:layout_alignParentEnd="true"
+                    tools:text="PHP 25.00"/>
 
-                <Space
-                    android:layout_width="10dp"
-                    android:layout_height="match_parent" />
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_below="@id/txt_container_round_price"
+                    android:layout_toEndOf="@id/img_container_round"
+                    android:layout_alignParentEnd="true">
 
-                <ImageButton
-                    android:id="@+id/btn_container_slim_count_inc"
-                    android:layout_height="match_parent"
-                    android:layout_width="50dp"
-                    android:layout_weight="0.1"
-                    android:src="@drawable/ic_chevron_right"
-                    android:background="@drawable/ripple_rectangle_color_gray"/>
+                    <ImageButton
+                        android:id="@+id/btn_container_round_count_dec"
+                        android:layout_height="match_parent"
+                        android:layout_width="50dp"
+                        android:layout_weight="0.1"
+                        android:src="@drawable/ic_chevron_left"
+                        android:background="@drawable/ripple_rectangle_color_gray"/>
 
-            </LinearLayout>
+                    <Space
+                        android:layout_width="10dp"
+                        android:layout_height="match_parent" />
+
+                    <EditText
+                        android:id="@+id/txt_container_round_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.8"
+                        android:inputType="number"
+                        android:background="@android:color/transparent"
+                        android:textAlignment="center"
+                        android:text="@string/txt_default_container_count"/>
+
+                    <Space
+                        android:layout_width="10dp"
+                        android:layout_height="match_parent" />
+
+                    <ImageButton
+                        android:id="@+id/btn_container_round_count_inc"
+                        android:layout_height="match_parent"
+                        android:layout_width="50dp"
+                        android:layout_weight="0.1"
+                        android:src="@drawable/ic_chevron_right"
+                        android:background="@drawable/ripple_rectangle_color_gray"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/container_slim"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/container_round">
+
+                <ImageView
+                    android:id="@+id/img_container_slim"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@mipmap/ic_container_slim"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="10dp"/>
+
+                <TextView
+                    android:id="@+id/lbl_container_slim"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/txt_slim_container"
+                    android:layout_marginBottom="5dp"
+                    android:layout_alignTop="@id/img_container_slim"
+                    android:layout_toEndOf="@id/img_container_slim"
+                    android:layout_alignParentEnd="true"/>
+
+                <TextView
+                    android:id="@+id/txt_container_slim_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_marginBottom="5dp"
+                    android:layout_alignBaseline="@id/lbl_container_slim"
+                    android:layout_alignParentEnd="true"
+                    tools:text="PHP 25.00"/>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_below="@id/lbl_container_slim"
+                    android:layout_toEndOf="@id/img_container_slim"
+                    android:layout_alignParentEnd="true">
+
+                    <ImageButton
+                        android:id="@+id/btn_container_slim_count_dec"
+                        android:layout_height="match_parent"
+                        android:layout_width="50dp"
+                        android:layout_weight="0.1"
+                        android:src="@drawable/ic_chevron_left"
+                        android:background="@drawable/ripple_rectangle_color_gray"/>
+
+                    <Space
+                        android:layout_width="10dp"
+                        android:layout_height="match_parent" />
+
+                    <EditText
+                        android:id="@+id/txt_container_slim_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.8"
+                        android:inputType="number"
+                        android:background="@android:color/transparent"
+                        android:textAlignment="center"
+                        android:text="@string/txt_default_container_count"/>
+
+                    <Space
+                        android:layout_width="10dp"
+                        android:layout_height="match_parent" />
+
+                    <ImageButton
+                        android:id="@+id/btn_container_slim_count_inc"
+                        android:layout_height="match_parent"
+                        android:layout_width="50dp"
+                        android:layout_weight="0.1"
+                        android:src="@drawable/ic_chevron_right"
+                        android:background="@drawable/ripple_rectangle_color_gray"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
 
             <CheckBox
                 android:id="@+id/chk_swap_containers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Swap containers"
-                android:layout_below="@id/img_container_slim"/>
+                android:text="@string/lbl_swap_containers"
+                android:layout_below="@id/container_slim"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -191,24 +240,21 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/container_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="15dp">
+            android:layout_below="@id/container_content">
 
             <RelativeLayout
                 android:id="@+id/container_buttons"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true">
+                android:layout_height="wrap_content">
 
                 <Button
                     android:id="@+id/btn_order"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Confirm order"
+                    android:padding="15dp"
+                    android:text="@string/lbl_order"
                     android:textColor="@android:color/white"
                     android:background="@drawable/ripple_rectangle_color_primary"
-                    android:padding="15dp"
                     android:layout_alignParentEnd="true"/>
 
             </RelativeLayout>

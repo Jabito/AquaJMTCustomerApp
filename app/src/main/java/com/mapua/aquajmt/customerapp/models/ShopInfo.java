@@ -16,10 +16,11 @@ public class ShopInfo {
     private String alternateNo;
     private Date timeOpen;
     private Date timeClose;
-    private Boolean allowSwap;
-    private Boolean accountVerified;
+    private boolean allowSwap;
+    private boolean accountVerified;
     private String daysAvailable;
-    private Boolean openOnHolidays;
+    private boolean openOnHolidays;
+    private double rating;
     private Date createdOn;
     private Date updatedOn;
     private String updatedBy;
@@ -32,18 +33,18 @@ public class ShopInfo {
                     String alternateNo,
                     Date timeOpen,
                     Date timeClose,
-                    Boolean allowSwap,
-                    Boolean accountVerified,
+                    boolean allowSwap,
+                    boolean accountVerified,
                     String daysAvailable,
-                    Boolean openOnHolidays,
+                    boolean openOnHolidays,
+                    double rating,
                     Date createdOn,
                     Date updatedOn,
                     String updatedBy) {
 
         if (id == null || businessName == null || address == null || location == null
                 || cellphoneNo == null || alternateNo == null || timeOpen == null
-                || timeClose == null || allowSwap == null || accountVerified == null
-                || daysAvailable == null || openOnHolidays == null || createdOn == null
+                || timeClose == null || daysAvailable == null || createdOn == null
                 || updatedOn == null || updatedBy == null || daysAvailable.length() != 7) {
             throw new IllegalArgumentException("Properties of this object is not allowed " +
                     "to contain null values.");
@@ -61,6 +62,7 @@ public class ShopInfo {
         this.accountVerified = accountVerified;
         this.daysAvailable = daysAvailable;
         this.openOnHolidays = openOnHolidays;
+        this.rating = rating;
         this.createdOn = createdOn;
         this.updatedOn = updatedOn;
         this.updatedBy = updatedBy;
@@ -130,19 +132,19 @@ public class ShopInfo {
         this.timeClose = timeClose;
     }
 
-    public Boolean getAllowSwap() {
+    public boolean isAllowSwap() {
         return allowSwap;
     }
 
-    public void setAllowSwap(Boolean allowSwap) {
+    public void setAllowSwap(boolean allowSwap) {
         this.allowSwap = allowSwap;
     }
 
-    public Boolean getAccountVerified() {
+    public boolean isAccountVerified() {
         return accountVerified;
     }
 
-    public void setAccountVerified(Boolean accountVerified) {
+    public void setAccountVerified(boolean accountVerified) {
         this.accountVerified = accountVerified;
     }
 
@@ -154,30 +156,20 @@ public class ShopInfo {
         this.daysAvailable = daysAvailable;
     }
 
-    public String[] getDaysAvailableInStringArray() {
-        if (daysAvailable.length() != 7) {
-            throw new IllegalStateException("This string's length should be equal to 7, " +
-                    "otherwise, continuing would cause further errors.");
-        }
-
-        ArrayList<String> daysAvailableList = new ArrayList<>();
-        if (daysAvailable.charAt(0) == '1') daysAvailableList.add("Sunday");
-        if (daysAvailable.charAt(1) == '1') daysAvailableList.add("Monday");
-        if (daysAvailable.charAt(2) == '1') daysAvailableList.add("Tuesday");
-        if (daysAvailable.charAt(3) == '1') daysAvailableList.add("Wednesday");
-        if (daysAvailable.charAt(4) == '1') daysAvailableList.add("Thursday");
-        if (daysAvailable.charAt(5) == '1') daysAvailableList.add("Friday");
-        if (daysAvailable.charAt(6) == '1') daysAvailableList.add("Saturday");
-
-        return daysAvailableList.toArray(new String[7]);
-    }
-
-    public Boolean getOpenOnHolidays() {
+    public boolean isOpenOnHolidays() {
         return openOnHolidays;
     }
 
-    public void setOpenOnHolidays(Boolean openOnHolidays) {
+    public void setOpenOnHolidays(boolean openOnHolidays) {
         this.openOnHolidays = openOnHolidays;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 
     public Date getCreatedOn() {
@@ -202,5 +194,23 @@ public class ShopInfo {
 
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
+    }
+
+    public String[] getDaysAvailableInStringArray() {
+        if (daysAvailable.length() != 7) {
+            throw new IllegalStateException("This string's length should be equal to 7, " +
+                    "otherwise, continuing would cause further errors.");
+        }
+
+        ArrayList<String> daysAvailableList = new ArrayList<>();
+        if (daysAvailable.charAt(0) == '1') daysAvailableList.add("Sunday");
+        if (daysAvailable.charAt(1) == '1') daysAvailableList.add("Monday");
+        if (daysAvailable.charAt(2) == '1') daysAvailableList.add("Tuesday");
+        if (daysAvailable.charAt(3) == '1') daysAvailableList.add("Wednesday");
+        if (daysAvailable.charAt(4) == '1') daysAvailableList.add("Thursday");
+        if (daysAvailable.charAt(5) == '1') daysAvailableList.add("Friday");
+        if (daysAvailable.charAt(6) == '1') daysAvailableList.add("Saturday");
+
+        return daysAvailableList.toArray(new String[7]);
     }
 }

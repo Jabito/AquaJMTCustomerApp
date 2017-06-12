@@ -7,76 +7,78 @@ import com.google.android.gms.maps.model.LatLng;
  */
 public class OrderForm {
 
-    public final static String ALKALINE_WATER_TYPE = "ALKALINE";
-    public final static String DISTILLED_WATER_TYPE = "DISTILLED";
-    public final static String PURIFIED_WATER_TYPE = "PURIFIED";
+    private String storeId; // orderedFrom
+    private String customerId; // orderedBy
 
-    private final String storeId; // orderedFrom
-    private final String customerId; // orderedBy
+    private LatLng deliveryLocation; // longitude, latitude
+    private String deliveryAddress; // customerAddress
+    private String deliveryDetails; // moreDetails
 
-    private final LatLng deliveryLocation; // longitude, latitude
-    private final String deliveryAddress; // customerAddress
-    private final String deliveryDetails; // moreDetails
-
-    private final String waterType; // as is
-    private final int slimOrdered; // as is
-    private final int roundOrdered; // as is
-
-    public OrderForm(String storeId,
-                     String customerId,
-                     LatLng deliveryLocation,
-                     String deliveryAddress,
-                     String deliveryDetails,
-                     String waterType,
-                     int slimOrdered,
-                     int roundOrdered) {
-
-        if (storeId == null || customerId == null || deliveryLocation == null
-                || deliveryAddress == null || deliveryAddress.isEmpty()
-                || deliveryDetails == null || waterType == null || waterType.isEmpty()) {
-            throw new IllegalArgumentException("Properties of this object is not allowed " +
-                    "to contain null values.");
-        }
-
-        this.storeId = storeId;
-        this.customerId = customerId;
-        this.deliveryLocation = deliveryLocation;
-        this.deliveryAddress = deliveryAddress;
-        this.deliveryDetails = deliveryDetails;
-        this.waterType = waterType;
-        this.slimOrdered = slimOrdered;
-        this.roundOrdered = roundOrdered;
-    }
+    private String waterType; // as is
+    private int slimOrdered; // as is
+    private int roundOrdered; // as is
 
     public String getStoreId() {
         return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
     }
 
     public String getCustomerId() {
         return customerId;
     }
 
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
     public LatLng getDeliveryLocation() {
         return deliveryLocation;
+    }
+
+    public void setDeliveryLocation(LatLng deliveryLocation) {
+        this.deliveryLocation = deliveryLocation;
     }
 
     public String getDeliveryAddress() {
         return deliveryAddress;
     }
 
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
+
     public String getDeliveryDetails() {
         return deliveryDetails;
+    }
+
+    public void setDeliveryDetails(String deliveryDetails) {
+        this.deliveryDetails = deliveryDetails;
     }
 
     public String getWaterType() {
         return waterType;
     }
 
+    public void setWaterType(String waterType) {
+        this.waterType = waterType;
+    }
+
     public int getSlimOrdered() {
         return slimOrdered;
     }
 
+    public void setSlimOrdered(int slimOrdered) {
+        this.slimOrdered = slimOrdered;
+    }
+
     public int getRoundOrdered() {
         return roundOrdered;
+    }
+
+    public void setRoundOrdered(int roundOrdered) {
+        this.roundOrdered = roundOrdered;
     }
 }
