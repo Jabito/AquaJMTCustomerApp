@@ -3,6 +3,7 @@ package com.mapua.aquajmt.customerapp.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,14 +31,16 @@ import butterknife.OnClick;
 
 public class OrderFragment extends DialogFragment {
 
+    public interface OrderFragmentListener {
+        void confirmOrder(OrderForm orderForm);
+    }
+
+    private static final String SHOP_INFO_PARAM = "shop_info_param";
+    private static final String SHOP_SALES_INFO_PARAM = "shop_sales_info_param";
     private static final String ALKALINE_STR = "Alkaline";
     private static final String PURIFIED_STR = "Purified";
     private static final String DISTILLED_STR = "Distilled";
     private static final String MINERAL_STR = "Mineral";
-
-    public interface OrderFragmentListener {
-        void order(OrderForm orderForm);
-    }
 
     @BindView(R.id.txt_ordering_from) TextView txtOrderingFrom;
     @BindView(R.id.txt_price) TextView txtPrice;
@@ -63,11 +66,28 @@ public class OrderFragment extends DialogFragment {
         // Required empty public constructor
     }
 
-    public static OrderFragment initialize(ShopInfo shopInfo, ShopSalesInfo shopSalesInfo) {
+    public static OrderFragment newInstance(ShopInfo shopInfo, ShopSalesInfo shopSalesInfo) {
         OrderFragment orderFragment = new OrderFragment();
-        orderFragment.shopInfo = shopInfo;
-        orderFragment.shopSalesInfo = shopSalesInfo;
+        Bundle args = new Bundle();
+        args.putParcelable(SHOP_INFO_PARAM, shopInfo);
+        args.putParcelable(SHOP_SALES_INFO_PARAM, shopSalesInfo);
+        orderFragment.setArguments(args);
         return orderFragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            shopInfo = getArguments().getParcelable(SHOP_INFO_PARAM);
+            shopSalesInfo = getArguments().getParcelable(SHOP_SALES_INFO_PARAM);
+
+            if (shopSalesInfo == null || shopInfo == null)
+                throw new IllegalStateException("The shopInfo or the shopSalesInfo object " +
+                        "cannot be null.");
+        } else
+            throw new IllegalArgumentException("No arguments supplied to this fragment.");
     }
 
     @Override
@@ -75,10 +95,6 @@ public class OrderFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_order, container, false);
         ButterKnife.bind(this, view);
-
-        if (shopSalesInfo == null || shopInfo == null)
-            throw new IllegalStateException("The shopInfo or the shopSalesInfo object " +
-                    "cannot be null.");
 
         return view;
     }
@@ -169,7 +185,7 @@ public class OrderFragment extends DialogFragment {
         orderForm.setRoundOrdered(getCountFromTextView(txtContainerRoundCount));
         orderForm.setSlimOrdered(getCountFromTextView(txtContainerSlimCount));
 
-        mListener.order(orderForm);
+        mListener.confirmOrder(orderForm);
         dismiss();
     }
 

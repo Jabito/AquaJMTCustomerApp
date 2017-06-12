@@ -1,12 +1,15 @@
 package com.mapua.aquajmt.customerapp.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.IllegalFormatException;
 
-public class ShopInfo {
+public class ShopInfo implements Parcelable {
 
     private String id;
     private String businessName;
@@ -67,6 +70,33 @@ public class ShopInfo {
         this.updatedOn = updatedOn;
         this.updatedBy = updatedBy;
     }
+
+    protected ShopInfo(Parcel in) {
+        id = in.readString();
+        businessName = in.readString();
+        address = in.readString();
+        location = in.readParcelable(LatLng.class.getClassLoader());
+        cellphoneNo = in.readString();
+        alternateNo = in.readString();
+        allowSwap = in.readByte() != 0;
+        accountVerified = in.readByte() != 0;
+        daysAvailable = in.readString();
+        openOnHolidays = in.readByte() != 0;
+        rating = in.readDouble();
+        updatedBy = in.readString();
+    }
+
+    public static final Creator<ShopInfo> CREATOR = new Creator<ShopInfo>() {
+        @Override
+        public ShopInfo createFromParcel(Parcel in) {
+            return new ShopInfo(in);
+        }
+
+        @Override
+        public ShopInfo[] newArray(int size) {
+            return new ShopInfo[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -212,5 +242,26 @@ public class ShopInfo {
         if (daysAvailable.charAt(6) == '1') daysAvailableList.add("Saturday");
 
         return daysAvailableList.toArray(new String[7]);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(businessName);
+        dest.writeString(address);
+        dest.writeParcelable(location, flags);
+        dest.writeString(cellphoneNo);
+        dest.writeString(alternateNo);
+        dest.writeByte((byte) (allowSwap ? 1 : 0));
+        dest.writeByte((byte) (accountVerified ? 1 : 0));
+        dest.writeString(daysAvailable);
+        dest.writeByte((byte) (openOnHolidays ? 1 : 0));
+        dest.writeDouble(rating);
+        dest.writeString(updatedBy);
     }
 }

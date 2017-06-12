@@ -1,12 +1,15 @@
 package com.mapua.aquajmt.customerapp.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
 /**
  * Created by Bryan on 6/12/2017.
  */
 
-public class ShopSalesInfo {
+public class ShopSalesInfo implements Parcelable {
 
     private String id;
     private boolean roundOffered;
@@ -75,6 +78,37 @@ public class ShopSalesInfo {
         this.updatedOn = updatedOn;
         this.updatedBy = updatedBy;
     }
+
+    protected ShopSalesInfo(Parcel in) {
+        id = in.readString();
+        roundOffered = in.readByte() != 0;
+        slimOffered = in.readByte() != 0;
+        roundStock = in.readInt();
+        slimStock = in.readInt();
+        distilledAvailable = in.readByte() != 0;
+        purifiedAvailable = in.readByte() != 0;
+        mineralAvailable = in.readByte() != 0;
+        alkalineAvailable = in.readByte() != 0;
+        distilledPrice = in.readDouble();
+        purifiedPrice = in.readDouble();
+        mineralPrice = in.readDouble();
+        alkalinePrice = in.readDouble();
+        slimContainerCost = in.readDouble();
+        roundContainerCost = in.readDouble();
+        updatedBy = in.readString();
+    }
+
+    public static final Creator<ShopSalesInfo> CREATOR = new Creator<ShopSalesInfo>() {
+        @Override
+        public ShopSalesInfo createFromParcel(Parcel in) {
+            return new ShopSalesInfo(in);
+        }
+
+        @Override
+        public ShopSalesInfo[] newArray(int size) {
+            return new ShopSalesInfo[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -218,5 +252,30 @@ public class ShopSalesInfo {
 
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeByte((byte) (roundOffered ? 1 : 0));
+        dest.writeByte((byte) (slimOffered ? 1 : 0));
+        dest.writeInt(roundStock);
+        dest.writeInt(slimStock);
+        dest.writeByte((byte) (distilledAvailable ? 1 : 0));
+        dest.writeByte((byte) (purifiedAvailable ? 1 : 0));
+        dest.writeByte((byte) (mineralAvailable ? 1 : 0));
+        dest.writeByte((byte) (alkalineAvailable ? 1 : 0));
+        dest.writeDouble(distilledPrice);
+        dest.writeDouble(purifiedPrice);
+        dest.writeDouble(mineralPrice);
+        dest.writeDouble(alkalinePrice);
+        dest.writeDouble(slimContainerCost);
+        dest.writeDouble(roundContainerCost);
+        dest.writeString(updatedBy);
     }
 }

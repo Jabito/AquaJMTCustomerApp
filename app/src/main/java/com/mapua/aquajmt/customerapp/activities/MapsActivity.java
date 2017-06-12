@@ -15,7 +15,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -42,6 +41,7 @@ import com.mapua.aquajmt.customerapp.R;
 import com.mapua.aquajmt.customerapp.api.ApiService;
 import com.mapua.aquajmt.customerapp.api.MockApiServiceImpl;
 import com.mapua.aquajmt.customerapp.api.models.OrderForm;
+import com.mapua.aquajmt.customerapp.fragments.OrderConfirmationFragment;
 import com.mapua.aquajmt.customerapp.fragments.OrderFragment;
 import com.mapua.aquajmt.customerapp.fragments.ShopInfoFragment;
 import com.mapua.aquajmt.customerapp.models.ShopInfo;
@@ -56,7 +56,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         View.OnClickListener, LocationListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, DrawerLayout.DrawerListener,
         GoogleMap.OnMarkerClickListener, GoogleMap.OnCameraIdleListener,
-        ShopInfoFragment.StoreInfoFragmentListener, OrderFragment.OrderFragmentListener {
+        ShopInfoFragment.StoreInfoFragmentListener, OrderFragment.OrderFragmentListener,
+        OrderConfirmationFragment.OrderConfirmationFragmentListener {
 
     public static final int ORDER_FROM_STORE_REQUEST = 1;
     public static final int VIEW_STORE_INFO_REQUEST = 2;
@@ -355,14 +356,26 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void orderFromStore() {
         if (currentShopInfo != null) {
-            OrderFragment orderFragment = OrderFragment.initialize(
+            OrderFragment orderFragment = OrderFragment.newInstance(
                     currentShopInfo, currentShopSalesInfo);
             orderFragment.show(getSupportFragmentManager(), "orderDialog");
         }
     }
 
     @Override
-    public void order(OrderForm orderForm) {
+    public void confirmOrder(OrderForm orderForm) {
+        OrderConfirmationFragment orderConfirmationFragment =
+                OrderConfirmationFragment.newInstance(orderForm);
+        orderConfirmationFragment.show(getSupportFragmentManager(), "orderConfirmationDialog");
+    }
+
+    @Override
+    public void orderSucceeded() {
+
+    }
+
+    @Override
+    public void orderFailed() {
 
     }
 
