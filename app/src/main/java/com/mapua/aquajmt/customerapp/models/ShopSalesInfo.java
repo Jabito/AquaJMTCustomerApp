@@ -35,49 +35,52 @@ public class ShopSalesInfo implements Parcelable {
     private Date updatedOn;
     private String updatedBy;
 
-    public ShopSalesInfo(String id,
-                         boolean roundOffered,
-                         boolean slimOffered,
-                         int roundStock,
-                         int slimStock,
-                         boolean distilledAvailable,
-                         boolean purifiedAvailable,
-                         boolean mineralAvailable,
-                         boolean alkalineAvailable,
-                         double distilledPrice,
-                         double purifiedPrice,
-                         double mineralPrice,
-                         double alkalinePrice,
-                         double slimContainerCost,
-                         double roundContainerCost,
-                         Date createdOn,
-                         Date updatedOn,
-                         String updatedBy) {
-
-        if (id == null || createdOn == null || updatedOn == null || updatedBy == null) {
-            throw new IllegalArgumentException("Properties of this object is not allowed " +
-                    "to contain null values.");
-        }
-
-        this.id = id;
-        this.roundOffered = roundOffered;
-        this.slimOffered = slimOffered;
-        this.roundStock = roundStock;
-        this.slimStock = slimStock;
-        this.distilledAvailable = distilledAvailable;
-        this.purifiedAvailable = purifiedAvailable;
-        this.mineralAvailable = mineralAvailable;
-        this.alkalineAvailable = alkalineAvailable;
-        this.distilledPrice = distilledPrice;
-        this.purifiedPrice = purifiedPrice;
-        this.mineralPrice = mineralPrice;
-        this.alkalinePrice = alkalinePrice;
-        this.slimContainerCost = slimContainerCost;
-        this.roundContainerCost = roundContainerCost;
-        this.createdOn = createdOn;
-        this.updatedOn = updatedOn;
-        this.updatedBy = updatedBy;
+    public ShopSalesInfo() {
     }
+
+    //    public ShopSalesInfo(String id,
+//                         boolean roundOffered,
+//                         boolean slimOffered,
+//                         int roundStock,
+//                         int slimStock,
+//                         boolean distilledAvailable,
+//                         boolean purifiedAvailable,
+//                         boolean mineralAvailable,
+//                         boolean alkalineAvailable,
+//                         double distilledPrice,
+//                         double purifiedPrice,
+//                         double mineralPrice,
+//                         double alkalinePrice,
+//                         double slimContainerCost,
+//                         double roundContainerCost,
+//                         Date createdOn,
+//                         Date updatedOn,
+//                         String updatedBy) {
+//
+//        if (id == null || createdOn == null || updatedOn == null || updatedBy == null) {
+//            throw new IllegalArgumentException("Properties of this object is not allowed " +
+//                    "to contain null values.");
+//        }
+//
+//        this.id = id;
+//        this.roundOffered = roundOffered;
+//        this.slimOffered = slimOffered;
+//        this.roundStock = roundStock;
+//        this.slimStock = slimStock;
+//        this.distilledAvailable = distilledAvailable;
+//        this.purifiedAvailable = purifiedAvailable;
+//        this.mineralAvailable = mineralAvailable;
+//        this.alkalineAvailable = alkalineAvailable;
+//        this.distilledPrice = distilledPrice;
+//        this.purifiedPrice = purifiedPrice;
+//        this.mineralPrice = mineralPrice;
+//        this.alkalinePrice = alkalinePrice;
+//        this.slimContainerCost = slimContainerCost;
+//        this.roundContainerCost = roundContainerCost;
+//        this.createdOn = createdOn;
+//        this.updatedOn = updatedOn;
+//        this.updatedBy = updatedBy;
+//    }
 
     protected ShopSalesInfo(Parcel in) {
         id = in.readString();

@@ -21,6 +21,7 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -38,9 +39,11 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mapua.aquajmt.customerapp.R;
+import com.mapua.aquajmt.customerapp.api.Api;
 import com.mapua.aquajmt.customerapp.api.ApiService;
 import com.mapua.aquajmt.customerapp.api.MockApiServiceImpl;
 import com.mapua.aquajmt.customerapp.api.models.OrderForm;
+import com.mapua.aquajmt.customerapp.api.retrofit.RetroFitApiImpl;
 import com.mapua.aquajmt.customerapp.fragments.OrderConfirmationFragment;
 import com.mapua.aquajmt.customerapp.fragments.OrderFragment;
 import com.mapua.aquajmt.customerapp.fragments.ShopInfoFragment;
@@ -315,18 +318,29 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onCameraIdle() {
         final LatLngBounds latLngBounds = googleMap.getProjection().getVisibleRegion().latLngBounds;
-        List<ShopInfo> shops = apiService.getShopsAt(latLngBounds);
 
-        for (ShopInfo shopInfo : shops) {
-            if (markerMapById.containsKey(shopInfo.getId()))
-                continue;
+        RetroFitApiImpl retroFitApi = new RetroFitApiImpl(Api.API_ENDPOINT);
+        retroFitApi.findShopsByBounds(latLngBounds.northeast, latLngBounds.southwest, new Api.FindShopsByBoundsListener() {
+            @Override
+            public void success(List<ShopInfo> shopInfos) {
+                for (ShopInfo shopInfo : shopInfos) {
+                    if (markerMapById.containsKey(shopInfo.getId()))
+                        continue;
 
-            Marker marker = googleMap.addMarker(new MarkerOptions().position(shopInfo.getLocation())
-                    .icon(VectorDrawableUtils.createBitmapDescriptor(getResources(),
-                            R.drawable.ic_local_cafe_35dp_primary_dark, getTheme())));
-            marker.setTag(shopInfo);
-            markerMapById.put(shopInfo.getId(), marker);
-        }
+                    Marker marker = googleMap.addMarker(new MarkerOptions().position(shopInfo.getLocation())
+                            .icon(VectorDrawableUtils.createBitmapDescriptor(getResources(),
+                                    R.drawable.ic_local_cafe_35dp_primary_dark, getTheme())));
+                    marker.setTag(shopInfo);
+                    markerMapById.put(shopInfo.getId(), marker);
+                }
+            }
+
+            @Override
+            public void error() {
+                Toast.makeText(MapsActivity.this, "An error occurred in retrieving " +
+                        "the shops in your view.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

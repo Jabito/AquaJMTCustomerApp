@@ -10,10 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.mapua.aquajmt.customerapp.R;
+import com.mapua.aquajmt.customerapp.activities.RegisterActivity;
+import com.mapua.aquajmt.customerapp.api.Api;
 import com.mapua.aquajmt.customerapp.api.models.OrderForm;
+import com.mapua.aquajmt.customerapp.api.retrofit.RetroFitApiImpl;
 import com.mapua.aquajmt.customerapp.models.ShopInfo;
 import com.mapua.aquajmt.customerapp.models.ShopSalesInfo;
 
@@ -137,6 +141,22 @@ public class OrderConfirmationFragment extends DialogFragment {
         orderForm.setDeliveryAddress(txtDeliveryAddress.getText().toString());
         orderForm.setDeliveryDetails(txtDeliveryDetails.getText().toString());
         orderForm.setDeliveryLocation(mListener.getCurrentLocation());
+
+        RetroFitApiImpl retroFitApi = new RetroFitApiImpl(Api.API_ENDPOINT);
+        retroFitApi.createOrder(orderForm, new Api.OrderListener() {
+            @Override
+            public void success() {
+                OrderConfirmationFragment.this.dismiss();
+                Toast.makeText(getActivity(), "Order was successfully sent.",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void error() {
+                Toast.makeText(getActivity(), "An error occurred.",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void goBackToOrderForm() {

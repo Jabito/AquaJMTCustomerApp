@@ -28,48 +28,51 @@ public class ShopInfo implements Parcelable {
     private Date updatedOn;
     private String updatedBy;
 
-    public ShopInfo(String id,
-                    String businessName,
-                    String address,
-                    LatLng location, // longitude:Float, latitude:Float
-                    String cellphoneNo,
-                    String alternateNo,
-                    Date timeOpen,
-                    Date timeClose,
-                    boolean allowSwap,
-                    boolean accountVerified,
-                    String daysAvailable,
-                    boolean openOnHolidays,
-                    double rating,
-                    Date createdOn,
-                    Date updatedOn,
-                    String updatedBy) {
-
-        if (id == null || businessName == null || address == null || location == null
-                || cellphoneNo == null || alternateNo == null || timeOpen == null
-                || timeClose == null || daysAvailable == null || createdOn == null
-                || updatedOn == null || updatedBy == null || daysAvailable.length() != 7) {
-            throw new IllegalArgumentException("Properties of this object is not allowed " +
-                    "to contain null values.");
-        }
-
-        this.id = id;
-        this.businessName = businessName;
-        this.cellphoneNo = cellphoneNo;
-        this.address = address;
-        this.location = location;
-        this.alternateNo = alternateNo;
-        this.timeOpen = timeOpen;
-        this.timeClose = timeClose;
-        this.allowSwap = allowSwap;
-        this.accountVerified = accountVerified;
-        this.daysAvailable = daysAvailable;
-        this.openOnHolidays = openOnHolidays;
-        this.rating = rating;
-        this.createdOn = createdOn;
-        this.updatedOn = updatedOn;
-        this.updatedBy = updatedBy;
+    public ShopInfo() {
     }
+
+//    public ShopInfo(String id,
+//                    String businessName,
+//                    String address,
+//                    LatLng location, // longitude:Float, latitude:Float
+//                    String cellphoneNo,
+//                    String alternateNo,
+//                    Date timeOpen,
+//                    Date timeClose,
+//                    boolean allowSwap,
+//                    boolean accountVerified,
+//                    String daysAvailable,
+//                    boolean openOnHolidays,
+//                    double rating,
+//                    Date createdOn,
+//                    Date updatedOn,
+//                    String updatedBy) {
+//
+//        if (id == null || businessName == null || address == null || location == null
+//                || cellphoneNo == null || alternateNo == null || timeOpen == null
+//                || timeClose == null || daysAvailable == null || createdOn == null
+//                || updatedOn == null || updatedBy == null || daysAvailable.length() != 7) {
+//            throw new IllegalArgumentException("Properties of this object is not allowed " +
+//                    "to contain null values.");
+//        }
+//
+//        this.id = id;
+//        this.businessName = businessName;
+//        this.cellphoneNo = cellphoneNo;
+//        this.address = address;
+//        this.location = location;
+//        this.alternateNo = alternateNo;
+//        this.timeOpen = timeOpen;
+//        this.timeClose = timeClose;
+//        this.allowSwap = allowSwap;
+//        this.accountVerified = accountVerified;
+//        this.daysAvailable = daysAvailable;
+//        this.openOnHolidays = openOnHolidays;
+//        this.rating = rating;
+//        this.createdOn = createdOn;
+//        this.updatedOn = updatedOn;
+//        this.updatedBy = updatedBy;
+//    }
 
     protected ShopInfo(Parcel in) {
         id = in.readString();

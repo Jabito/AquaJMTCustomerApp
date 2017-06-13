@@ -1,29 +1,30 @@
 package com.mapua.aquajmt.customerapp.api.models;
 
 /**
- * Created by Bryan on 6/11/2017.
+ * Created by Bryan on 6/13/2017.
  */
 
 public class LoginForm {
 
-    private final String username;
-    private final String password;
+    private String username;
+    private String password;
 
-    public LoginForm(String username, String password) {
-        if (username == null || password == null) {
-            throw new IllegalArgumentException("Properties of this object is not allowed " +
-                    "to contain null values.");
-        }
-
-        this.username = username;
-        this.password = password;
+    public LoginForm() {
     }
 
     public String getUsername() {
         return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
