@@ -47,6 +47,7 @@ import com.mapua.aquajmt.customerapp.fragments.OrderFragment;
 import com.mapua.aquajmt.customerapp.fragments.ShopInfoFragment;
 import com.mapua.aquajmt.customerapp.models.ShopInfo;
 import com.mapua.aquajmt.customerapp.models.ShopSalesInfo;
+import com.mapua.aquajmt.customerapp.sqlite.LoginDbHelper;
 import com.mapua.aquajmt.customerapp.utils.VectorDrawableUtils;
 
 import java.util.HashMap;
@@ -205,6 +206,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
+                                LoginDbHelper.removeAll(MapsActivity.this);
                                 startActivity(new Intent(MapsActivity.this, LoginActivity.class));
                                 finish();
                             case DialogInterface.BUTTON_NEGATIVE:
@@ -308,7 +310,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         final LatLngBounds latLngBounds = googleMap.getProjection().getVisibleRegion().latLngBounds;
 
         RetroFitApiImpl retroFitApi = new RetroFitApiImpl(Api.API_ENDPOINT);
-        retroFitApi.findShopsByBounds(latLngBounds.northeast, latLngBounds.southwest, new Api.FindShopsByBoundsListener() {
+        retroFitApi.findShopsByBounds(latLngBounds.southwest, latLngBounds.northeast, new Api.FindShopsByBoundsListener() {
             @Override
             public void success(List<ShopInfo> shopInfos) {
                 for (ShopInfo shopInfo : shopInfos) {

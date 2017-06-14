@@ -9,6 +9,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.mapua.aquajmt.customerapp.sqlite.LoginDbHelper;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final int LOCATION_PERMISSION_REQUEST = 100;
@@ -23,9 +25,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void goToMapActivity() {
+        final boolean isLoggedIn = LoginDbHelper.getTop1(this) != null;
+
         if (canStartApplication) {
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
+            if (!isLoggedIn) {
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
+            } else {
+                startActivity(new Intent(this, MapsActivity.class));
+                finish();
+            }
         }
     }
 

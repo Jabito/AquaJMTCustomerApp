@@ -11,6 +11,7 @@ import com.mapua.aquajmt.customerapp.api.Api;
 import com.mapua.aquajmt.customerapp.api.models.CustomerInfo;
 import com.mapua.aquajmt.customerapp.api.models.RegisterForm;
 import com.mapua.aquajmt.customerapp.api.retrofit.RetroFitApiImpl;
+import com.mapua.aquajmt.customerapp.sqlite.LoginDbHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,7 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
         retroFitApi.register(registerForm, new Api.RegisterListener() {
             @Override
             public void success(CustomerInfo customerInfo) {
-                // TODO: save this in shared prefs
+                LoginDbHelper.save(RegisterActivity.this, customerInfo);
 
                 Intent intent = new Intent(RegisterActivity.this, MapsActivity.class);
                 startActivity(intent);

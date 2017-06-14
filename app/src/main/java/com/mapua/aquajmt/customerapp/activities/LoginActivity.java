@@ -10,6 +10,7 @@ import com.mapua.aquajmt.customerapp.R;
 import com.mapua.aquajmt.customerapp.api.Api;
 import com.mapua.aquajmt.customerapp.api.models.CustomerInfo;
 import com.mapua.aquajmt.customerapp.api.retrofit.RetroFitApiImpl;
+import com.mapua.aquajmt.customerapp.sqlite.LoginDbHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
                 new Api.LoginListener() {
                     @Override
                     public void success(CustomerInfo customerInfo) {
-                        // TODO: save this in shared prefs
+                        LoginDbHelper.save(LoginActivity.this, customerInfo);
 
                         Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
                         startActivity(intent);
