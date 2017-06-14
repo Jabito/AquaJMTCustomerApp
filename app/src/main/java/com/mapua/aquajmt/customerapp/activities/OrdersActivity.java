@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.mapua.aquajmt.customerapp.R;
 import com.mapua.aquajmt.customerapp.adapters.OrdersAdapter;
@@ -30,8 +31,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class OrdersActivity extends AppCompatActivity implements
-        SwipeRefreshLayout.OnRefreshListener, RateOrderFragment.RateOrderFragmentListener {
+public class OrdersActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.swipe_layout) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.lst_orders) ListView lstOrders;

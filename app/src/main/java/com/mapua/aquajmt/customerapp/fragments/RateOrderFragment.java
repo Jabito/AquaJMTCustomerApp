@@ -1,7 +1,6 @@
 package com.mapua.aquajmt.customerapp.fragments;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mapua.aquajmt.customerapp.R;
@@ -26,15 +26,13 @@ public class RateOrderFragment extends DialogFragment {
     private static final String STORE_ID_PARAM = "store_id_param";
     private static final String ORDER_ID_PARAM = "order_id_param";
 
-    public interface RateOrderFragmentListener { }
-
     @BindView(R.id.img_first_star) ImageView imgFirstStar;
     @BindView(R.id.img_second_star) ImageView imgSecondStar;
     @BindView(R.id.img_third_star) ImageView imgThirdStar;
     @BindView(R.id.img_fourth_star) ImageView imgFourthStar;
     @BindView(R.id.img_fifth_star) ImageView imgFifthStar;
+    @BindView(R.id.txt_comments) TextView txtComments;
 
-    private RateOrderFragmentListener mListener;
     private int rating;
     private String storeId;
     private String orderId;
@@ -78,23 +76,6 @@ public class RateOrderFragment extends DialogFragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof RateOrderFragmentListener) {
-            mListener = (RateOrderFragmentListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement RateOrderFragmentListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    @Override
     public void onStart() {
         super.onStart();
 
@@ -134,23 +115,27 @@ public class RateOrderFragment extends DialogFragment {
 
     @OnClick(R.id.btn_ok)
     public void ok() {
-        RateOrderFragment.this.dismiss();
         RetroFitApiImpl retroFitApi = new RetroFitApiImpl(Api.API_ENDPOINT);
 
         RateOrderForm rateOrderForm = new RateOrderForm();
         rateOrderForm.setShopId(storeId);
         rateOrderForm.setOrderId(orderId);
+        rateOrderForm.setRating(rating);
+        rateOrderForm.setComments(txtComments.getText().toString());
+
         retroFitApi.rateOrder(rateOrderForm, new Api.RateOrderListener() {
             @Override
             public void success() {
-                Toast.makeText(getContext(), "The order you selected has been rated " +
+                Toast.makeText(getActivity(), "The order you selected has been rated " +
                         "successfully.", Toast.LENGTH_SHORT).show();
+                RateOrderFragment.this.dismiss();
             }
 
             @Override
             public void error() {
-                Toast.makeText(getContext(), "An error occured while " +
+                Toast.makeText(getActivity(), "An error occured while " +
                         "trying to rate the order you selected.", Toast.LENGTH_SHORT).show();
+                RateOrderFragment.this.dismiss();
             }
         });
     }

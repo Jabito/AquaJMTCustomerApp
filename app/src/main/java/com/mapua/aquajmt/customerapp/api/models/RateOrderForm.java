@@ -8,7 +8,7 @@ public class RateOrderForm {
 
     private String orderId;
     private String shopId;
-    private String rating;
+    private float rating;
     private String comments;
 
     public String getOrderId() {
@@ -27,11 +27,11 @@ public class RateOrderForm {
         this.shopId = shopId;
     }
 
-    public String getRating() {
+    public float getRating() {
         return rating;
     }
 
-    public void setRating(String rating) {
+    public void setRating(float rating) {
         this.rating = rating;
     }
 
