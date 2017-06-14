@@ -1,6 +1,7 @@
 package com.mapua.aquajmt.customerapp.api.retrofit;
 
 import com.mapua.aquajmt.customerapp.api.Api;
+import com.mapua.aquajmt.customerapp.api.models.OrderJson;
 import com.mapua.aquajmt.customerapp.api.models.RateOrderForm;
 import com.mapua.aquajmt.customerapp.api.models.LoginForm;
 import com.mapua.aquajmt.customerapp.api.models.OrderForm;
@@ -32,7 +33,7 @@ interface ApiService {
     Call<ResponseBody> updateCustomer(@Body UpdateCustomerForm updateCustomerForm);
 
     @POST(Api.CREATE_ORDER_ENDPOINT)
-    Call<ResponseBody> createOrder(@Body OrderForm orderForm);
+    Call<ResponseBody> createOrder(@Body OrderJson orderJson);
 
     @POST(Api.RATE_ORDER_ENDPOINT)
     Call<ResponseBody> rateOrder(@Body RateOrderForm rateOrderForm);
@@ -40,6 +41,10 @@ interface ApiService {
     @GET(Api.FIND_SHOPS_ENDPOINT)
     Call<ResponseBody> findShops(@Query("x1") double lat1, @Query("y1") double lng1,
                                  @Query("x2") double lat2, @Query("y2") double lng2);
+
+    @GET(Api.GET_ORDERS_BY_STATUS_AND_CUSTOMER_ID)
+    Call<ResponseBody> getOrdersByStatusAndCustomerId(@Query("id") String customerId,
+                                                      @Query("status") String status);
 
     @GET(Api.GET_SHOP_INFO_ENDPOINT)
     Call<ResponseBody> getShopInfo(@Query("id") String shopId);

@@ -16,10 +16,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.mapua.aquajmt.customerapp.R;
 import com.mapua.aquajmt.customerapp.activities.RegisterActivity;
 import com.mapua.aquajmt.customerapp.api.Api;
+import com.mapua.aquajmt.customerapp.api.models.CustomerInfo;
 import com.mapua.aquajmt.customerapp.api.models.OrderForm;
+import com.mapua.aquajmt.customerapp.api.models.OrderJson;
 import com.mapua.aquajmt.customerapp.api.retrofit.RetroFitApiImpl;
 import com.mapua.aquajmt.customerapp.models.ShopInfo;
 import com.mapua.aquajmt.customerapp.models.ShopSalesInfo;
+import com.mapua.aquajmt.customerapp.sqlite.LoginDbHelper;
 
 import java.util.Locale;
 

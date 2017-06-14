@@ -20,9 +20,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mapua.aquajmt.customerapp.R;
+import com.mapua.aquajmt.customerapp.api.models.CustomerInfo;
 import com.mapua.aquajmt.customerapp.api.models.OrderForm;
 import com.mapua.aquajmt.customerapp.models.ShopInfo;
 import com.mapua.aquajmt.customerapp.models.ShopSalesInfo;
+import com.mapua.aquajmt.customerapp.sqlite.LoginDbHelper;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -213,10 +215,12 @@ public class OrderFragment extends DialogFragment {
             return;
         }
 
+        CustomerInfo customerInfo = LoginDbHelper.getTop1(getActivity());
+
         OrderForm orderForm = new OrderForm();
-        orderForm.setCustomerId(""); // TODO: set this when the login api integration is ready
+        orderForm.setCustomerId(customerInfo.getId());
         orderForm.setStoreId(shopInfo.getId());
-        orderForm.setWaterType((String) spnrWaterType.getSelectedItem());
+        orderForm.setWaterType(((String) spnrWaterType.getSelectedItem()).toUpperCase());
         orderForm.setRoundOrdered(roundCount);
         orderForm.setSlimOrdered(slimCount);
         orderForm.setSwapping(chkSwapContainers.isChecked());

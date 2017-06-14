@@ -2,6 +2,7 @@ package com.mapua.aquajmt.customerapp.api;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.mapua.aquajmt.customerapp.api.models.CustomerInfo;
+import com.mapua.aquajmt.customerapp.api.models.OrderInfo;
 import com.mapua.aquajmt.customerapp.api.models.OrderForm;
 import com.mapua.aquajmt.customerapp.api.models.RateOrderForm;
 import com.mapua.aquajmt.customerapp.api.models.RegisterForm;
@@ -27,6 +28,7 @@ public abstract class Api {
     public static final String CREATE_ORDER_ENDPOINT = "/api/addOrderInfo";
     public static final String RATE_ORDER_ENDPOINT = "/api/rateOrder";
     public static final String FIND_SHOPS_ENDPOINT = "/api/findShopsByBounds";
+    public static final String GET_ORDERS_BY_STATUS_AND_CUSTOMER_ID = "/api/getOrdersByStatusAndCustomerId";
     public static final String GET_SHOP_INFO_ENDPOINT = "/api/shop/info";
     public static final String GET_SHOP_SALES_INFO_ENDPOINT = "/api/shop/sales/information";
 
@@ -35,7 +37,7 @@ public abstract class Api {
     public static final SimpleDateFormat SIMPLE_DATE_FORMAT
             = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     public static final SimpleDateFormat SIMPLE_TIME_FORMAT
-            = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+            = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
     public abstract void login(String username, String password, LoginListener loginListener);
     public abstract void register(RegisterForm registerForm, RegisterListener registerListener);
@@ -44,6 +46,7 @@ public abstract class Api {
     public abstract void createOrder(OrderForm orderForm, OrderListener orderListener);
     public abstract void rateOrder(RateOrderForm rateOrderForm, RateOrderListener rateOrderListener);
     public abstract void findShopsByBounds(LatLng upperLeft, LatLng bottomRight, FindShopsByBoundsListener findShopsByBoundsListener);
+    public abstract void getOrders(String customerId, String status, GetOrdersListener getOrdersListener);
     public abstract void getShopInfo(String shopId, GetShopInfoListener getShopInfoListener);
     public abstract void getShopSalesInfo(String shopId, GetShopSalesInfoListener getShopSalesInfoListener);
 
@@ -75,6 +78,11 @@ public abstract class Api {
     }
 
     public interface RateOrderListener extends CommonListener {
+    }
+
+    public interface GetOrdersListener {
+        void success(List<OrderInfo> orderInfo);
+        void error();
     }
 
     public interface FindShopsByBoundsListener {
