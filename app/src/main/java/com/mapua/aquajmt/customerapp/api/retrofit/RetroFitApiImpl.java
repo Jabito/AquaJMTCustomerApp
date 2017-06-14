@@ -112,10 +112,10 @@ public class RetroFitApiImpl extends Api {
                         customerInfo.setMiddleName(customerInfoJson.getString("middleName"));
                         customerInfo.setCellphoneNo(customerInfoJson.getString("cellphoneNo"));
                         customerInfo.setLandline(customerInfoJson.getString("landline"));
-                        customerInfo.setCreatedOn(Api.SIMPLE_DATETIME_FORMAT
-                                .parse(customerInfoJson.getString("createdOn")));
-                        customerInfo.setCreatedOn(Api.SIMPLE_DATETIME_FORMAT
-                                .parse(customerInfoJson.getString("updatedOn")));
+                        customerInfo.setCreatedOn(customerInfoJson.get("createdOn") != null ?
+                                Api.SIMPLE_DATETIME_FORMAT.parse(customerInfoJson.getString("createdOn")) : null);
+                        customerInfo.setCreatedOn(customerInfoJson.get("updatedOn") != null ?
+                                Api.SIMPLE_DATETIME_FORMAT.parse(customerInfoJson.getString("updatedOn")) : null);
                         registerListener.success(customerInfo);
 
                     } else if (response.code() == 409) {
