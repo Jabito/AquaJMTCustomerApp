@@ -12,6 +12,7 @@ public class OrderInfo {
     private String orderedFrom;
     private String customerName;
     private String customerAddress;
+    private String shopName;
     private Double longitude;
     private Double latitude;
     private String waterType;
@@ -65,6 +66,14 @@ public class OrderInfo {
 
     public void setCustomerAddress(String customerAddress) {
         this.customerAddress = customerAddress;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
     }
 
     public Double getLongitude() {

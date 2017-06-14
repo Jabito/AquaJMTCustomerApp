@@ -1,0 +1,95 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="com.mapua.aquajmt.customerapp.fragments.RateOrderFragment">
+
+    <RelativeLayout
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp">
+
+        <TextView
+            android:id="@+id/lbl_rate_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="I rate this order"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"/>
+
+        <LinearLayout
+            android:id="@+id/rating_container"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lbl_rate_desc"
+            android:layout_centerHorizontal="true">
+
+            <ImageView
+                android:id="@+id/img_first_star"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:tint="@color/colorAccent"
+                tools:src="@drawable/ic_star_black"/>
+
+            <ImageView
+                android:id="@+id/img_second_star"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:tint="@color/colorAccent"
+                tools:src="@drawable/ic_star_black"/>
+
+            <ImageView
+                android:id="@+id/img_third_star"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:tint="@color/colorAccent"
+                tools:src="@drawable/ic_star_black"/>
+
+            <ImageView
+                android:id="@+id/img_fourth_star"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:tint="@color/colorAccent"
+                tools:src="@drawable/ic_star_black"/>
+
+            <ImageView
+                android:id="@+id/img_fifth_star"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:tint="@color/colorAccent"
+                tools:src="@drawable/ic_star_half_black"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/lbl_comments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Comments"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"
+            android:layout_below="@id/rating_container"/>
+
+        <EditText
+            android:id="@+id/txt_comments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:minLines="2"
+            android:layout_below="@id/lbl_comments"/>
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_ok"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="OK"
+        android:textColor="@android:color/white"
+        android:background="@drawable/ripple_rectangle_color_primary"
+        android:layout_below="@id/main_content"/>
+
+</RelativeLayout>

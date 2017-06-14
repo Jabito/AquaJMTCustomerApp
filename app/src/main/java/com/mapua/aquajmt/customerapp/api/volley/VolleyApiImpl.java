@@ -84,6 +84,11 @@ public class VolleyApiImpl extends Api {
     }
 
     @Override
+    public void getOrders(String customerId, String status, GetOrdersListener getOrdersListener) {
+
+    }
+
+    @Override
     public void getShopInfo(String shopId, GetShopInfoListener getShopInfoListener) {
 
     }

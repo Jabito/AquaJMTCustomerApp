@@ -177,10 +177,10 @@ public class RetroFitApiImpl extends Api {
                         customerInfo.setMiddleName(customerInfoJson.getString("middleName"));
                         customerInfo.setCellphoneNo(customerInfoJson.getString("cellphoneNo"));
                         customerInfo.setLandline(customerInfoJson.getString("landline"));
-                        customerInfo.setCreatedOn(Api.SIMPLE_DATETIME_FORMAT
-                                .parse(customerInfoJson.getString("createdOn")));
-                        customerInfo.setUpdatedOn(Api.SIMPLE_DATETIME_FORMAT
-                                .parse(customerInfoJson.getString("updatedOn")));
+                        customerInfo.setCreatedOn(customerInfoJson.get("createdOn") != null ?
+                                Api.SIMPLE_DATETIME_FORMAT.parse(customerInfoJson.getString("createdOn")) : null);
+                        customerInfo.setCreatedOn(customerInfoJson.get("updatedOn") != null ?
+                                Api.SIMPLE_DATETIME_FORMAT.parse(customerInfoJson.getString("updatedOn")) : null);
                         updateCustomerListener.success(customerInfo);
 
                     } else {
@@ -266,9 +266,9 @@ public class RetroFitApiImpl extends Api {
                                 shopInfo.setAccountVerified(shopInfoJson.getBoolean("accountVerified"));
                                 shopInfo.setDaysAvailable(shopInfoJson.getString("daysAvailable"));
                                 shopInfo.setOpenOnHolidays(shopInfoJson.getBoolean("openOnHolidays"));
-                                shopInfo.setCreatedOn(shopInfoJson.getString("createdOn") != null ?
+                                shopInfo.setCreatedOn(shopInfoJson.get("createdOn") != null ?
                                         Api.SIMPLE_DATETIME_FORMAT.parse(shopInfoJson.getString("createdOn")) : null);
-                                shopInfo.setUpdatedOn(shopInfoJson.getString("updatedOn") != null ?
+                                shopInfo.setUpdatedOn(shopInfoJson.get("updatedOn") != null && !shopInfoJson.getString("updatedOn").equals("null") ?
                                         Api.SIMPLE_DATETIME_FORMAT.parse(shopInfoJson.getString("updatedOn")) : null);
                                 shopInfo.setUpdatedBy(shopInfoJson.getString("updatedBy"));
                                 shopInfo.setLocation(new LatLng(shopInfoJson.getDouble("latitude"),
@@ -317,9 +317,9 @@ public class RetroFitApiImpl extends Api {
                         shopInfo.setAccountVerified(shopInfoJson.getBoolean("accountVerified"));
                         shopInfo.setDaysAvailable(shopInfoJson.getString("daysAvailable"));
                         shopInfo.setOpenOnHolidays(shopInfoJson.getBoolean("openOnHolidays"));
-                        shopInfo.setCreatedOn(shopInfoJson.getString("createdOn") != null ?
+                        shopInfo.setCreatedOn(shopInfoJson.get("createdOn") != null ?
                                 Api.SIMPLE_DATETIME_FORMAT.parse(shopInfoJson.getString("createdOn")) : null);
-                        shopInfo.setUpdatedOn(shopInfoJson.getString("updatedOn") != null ?
+                        shopInfo.setUpdatedOn(shopInfoJson.get("updatedOn") != null && !shopInfoJson.getString("updatedOn").equals("null") ?
                                 Api.SIMPLE_DATETIME_FORMAT.parse(shopInfoJson.getString("updatedOn")) : null);
                         shopInfo.setUpdatedBy(shopInfoJson.getString("updatedBy"));
                         shopInfo.setLocation(new LatLng(shopInfoJson.getDouble("latitude"),
@@ -361,25 +361,30 @@ public class RetroFitApiImpl extends Api {
 
                             OrderInfo orderInfo = new OrderInfo();
                             orderInfo.setId(orderInfoJson.getString("id"));
-                            orderInfo.setId(orderInfoJson.getString("orderedBy"));
-                            orderInfo.setId(orderInfoJson.getString("orderedFrom"));
+                            orderInfo.setOrderedBy(orderInfoJson.getString("orderedBy"));
+                            orderInfo.setOrderedFrom(orderInfoJson.getString("orderedFrom"));
+                            orderInfo.setShopName(orderInfoJson.getString("shopName"));
                             orderInfo.setCustomerName(orderInfoJson.getString("customerName") != null ?
                                     orderInfoJson.getString("customerName") : null);
                             orderInfo.setCustomerAddress(orderInfoJson.getString("customerAddress"));
-                            orderInfo.setLongitude((Double) orderInfoJson.get("longitude"));
-                            orderInfo.setLatitude((Double) orderInfoJson.get("latitude"));
+                            orderInfo.setLongitude(orderInfoJson.get("longitude") != null
+                                    && orderInfoJson.get("longitude").equals("null") ?
+                                    orderInfoJson.getDouble("longitude") : 0.0);
+                            orderInfo.setLatitude(orderInfoJson.get("latitude") != null
+                                    && orderInfoJson.get("latitude").equals("null") ?
+                                    orderInfoJson.getDouble("latitude") : 0.0);
                             orderInfo.setWaterType(orderInfoJson.getString("waterType"));
                             orderInfo.setRoundOrdered(orderInfoJson.getInt("roundOrdered"));
                             orderInfo.setSlimOrdered(orderInfoJson.getInt("slimOrdered"));
                             orderInfo.setCostPerItem(orderInfoJson.getDouble("costPerItem"));
                             orderInfo.setTotalCost(orderInfoJson.getDouble("totalCost"));
                             orderInfo.setMoreDetails(orderInfoJson.getString("moreDetails"));
-                            orderInfo.setCreatedOn(orderInfoJson.getString("createdOn") != null ?
+                            orderInfo.setCreatedOn(orderInfoJson.get("createdOn") != null ?
                                     Api.SIMPLE_DATETIME_FORMAT.parse(orderInfoJson.getString("createdOn")) : null);
-                            orderInfo.setUpdatedOn(orderInfoJson.getString("updatedOn") != null ?
+                            orderInfo.setUpdatedOn(orderInfoJson.get("updatedOn") != null && !orderInfoJson.getString("updatedOn").equals("null")  ?
                                     Api.SIMPLE_DATETIME_FORMAT.parse(orderInfoJson.getString("updatedOn")) : null);
                             orderInfo.setUpdatedBy(orderInfoJson.getString("updatedBy"));
-                            orderInfo.setRatingGiven((Integer) orderInfoJson.get("ratingGiven"));
+                            orderInfo.setRatingGiven(orderInfoJson.optInt("ratingGiven"));
                             orderInfo.setStatus(orderInfoJson.getString("status"));
                             orderInfo.setComments(orderInfoJson.getString("comments"));
 

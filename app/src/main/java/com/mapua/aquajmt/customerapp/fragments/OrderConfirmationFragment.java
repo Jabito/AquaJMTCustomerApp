@@ -177,21 +177,20 @@ public class OrderConfirmationFragment extends DialogFragment {
                 shopSalesInfo.isSlimOffered() ? View.VISIBLE : View.GONE);
 
         double containerPrice;
-        switch(orderForm.getWaterType()) {
-            case OrderFragment.ALKALINE_STR:
-                containerPrice = shopSalesInfo.getAlkalinePrice();
-                break;
-            case OrderFragment.DISTILLED_STR:
-                containerPrice = shopSalesInfo.getDistilledPrice();
-                break;
-            case OrderFragment.PURIFIED_STR:
-                containerPrice = shopSalesInfo.getPurifiedPrice();
-                break;
-            case OrderFragment.MINERAL_STR:
-                containerPrice = shopSalesInfo.getMineralPrice();
-                break;
-            default:
-                throw new AssertionError("Unknown water type.");
+        if (orderForm.getWaterType().equalsIgnoreCase(OrderFragment.ALKALINE_STR)) {
+            containerPrice = shopSalesInfo.getAlkalinePrice();
+
+        } else if (orderForm.getWaterType().equalsIgnoreCase(OrderFragment.DISTILLED_STR)) {
+            containerPrice = shopSalesInfo.getDistilledPrice();
+
+        } else if (orderForm.getWaterType().equalsIgnoreCase(OrderFragment.PURIFIED_STR)) {
+            containerPrice = shopSalesInfo.getPurifiedPrice();
+
+        } else if (orderForm.getWaterType().equalsIgnoreCase(OrderFragment.MINERAL_STR)) {
+            containerPrice = shopSalesInfo.getMineralPrice();
+
+        } else {
+            throw new AssertionError("Unknown water type. " + orderForm.getWaterType());
         }
 
         String price = String.format(Locale.getDefault(), "PHP %.2f", containerPrice);

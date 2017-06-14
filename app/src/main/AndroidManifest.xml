@@ -37,6 +37,7 @@
             android:theme="@style/NoActionbarAppTheme" />
         <activity android:name=".activities.PaymentHistoryActivity" />
         <activity android:name=".activities.EditProfileActivity" />
+        <activity android:name=".activities.OrdersActivity"></activity>
     </application>
 
 </manifest>

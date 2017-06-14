@@ -80,7 +80,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ImageButton btnPrevStore;
     private ImageButton btnGoToLocation;
     private Button btnEditProfile;
-    private Button btnUserPaymentHistory;
+    private Button btnUserOrders;
     private Button btnLogout;
 
     private View storeInfoFragmentContainer;
@@ -131,11 +131,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         btnGoToLocation.setOnClickListener(this);
 
         btnEditProfile = (Button) findViewById(R.id.btn_edit_profile);
-        btnUserPaymentHistory = (Button) findViewById(R.id.btn_user_payment_history);
+        btnUserOrders = (Button) findViewById(R.id.btn_user_orders);
         btnLogout = (Button) findViewById(R.id.btn_logout);
 
         btnEditProfile.setOnClickListener(this);
-        btnUserPaymentHistory.setOnClickListener(this);
+        btnUserOrders.setOnClickListener(this);
         btnLogout.setOnClickListener(this);
 
         googleApiClient = new GoogleApiClient.Builder(this)
@@ -197,8 +197,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.btn_edit_profile:
                 startActivity(new Intent(this, EditProfileActivity.class));
                 break;
-            case R.id.btn_user_payment_history:
-                startActivity(new Intent(this, PaymentHistoryActivity.class));
+            case R.id.btn_user_orders:
+                startActivity(new Intent(this, OrdersActivity.class));
                 break;
             case R.id.btn_logout:
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {

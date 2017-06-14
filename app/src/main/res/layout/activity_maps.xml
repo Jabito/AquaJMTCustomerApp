@@ -112,8 +112,8 @@
                 style="@style/DrawerButtonStyle" />
 
             <Button
-                android:id="@+id/btn_user_payment_history"
-                android:text="@string/txt_payment_history"
+                android:id="@+id/btn_user_orders"
+                android:text="Orders"
                 style="@style/DrawerButtonStyle" />
 
         </LinearLayout>
