@@ -147,14 +147,12 @@ public class OrderConfirmationFragment extends DialogFragment {
             @Override
             public void success() {
                 OrderConfirmationFragment.this.dismiss();
-                Toast.makeText(getActivity(), "Order was successfully sent.",
-                        Toast.LENGTH_SHORT).show();
+                mListener.orderSucceeded();
             }
 
             @Override
             public void error() {
-                Toast.makeText(getActivity(), "An error occurred.",
-                        Toast.LENGTH_SHORT).show();
+                mListener.orderFailed();
             }
         });
     }

@@ -10,8 +10,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mapua.aquajmt.customerapp.R;
+import com.mapua.aquajmt.customerapp.activities.LoginActivity;
+import com.mapua.aquajmt.customerapp.api.Api;
+import com.mapua.aquajmt.customerapp.api.retrofit.RetroFitApiImpl;
 import com.mapua.aquajmt.customerapp.models.ShopInfo;
 import com.mapua.aquajmt.customerapp.models.ShopSalesInfo;
 import com.mapua.aquajmt.customerapp.utils.DateTimeUtils;
