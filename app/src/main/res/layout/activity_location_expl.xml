@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.mapua.aquajmt.customerapp.activities.LocationExplActivity">
+
+    <ImageView
+        android:id="@+id/img_loc_svc_art"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="50dp"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/lbl_loc_svc_expl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/txt_loc_svc_expl"
+        android:textAlignment="center"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="30dp"
+        android:layout_below="@id/img_loc_svc_art"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:id="@+id/btn_enable_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:text="@string/txt_enable_location_services"
+        android:background="@drawable/ripple_rectangle_color_gray"
+        android:layout_below="@id/lbl_loc_svc_expl"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>

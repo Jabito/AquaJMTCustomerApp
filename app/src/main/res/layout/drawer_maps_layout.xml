@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/left_drawer_pane"
+    android:background="@android:color/white"
+    android:layout_gravity="start"
+    android:layout_width="220dp"
+    android:layout_height="match_parent"
+    tools:showIn="@layout/activity_maps">
+
+    <RelativeLayout
+        android:id="@+id/aqua_logo_layout"
+        android:layout_marginBottom="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/logo"
+            android:scaleType="fitCenter" />
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_below="@id/aqua_logo_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textSize="30sp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="10dp" />
+
+        <Button
+            android:id="@+id/btn_user_orders"
+            android:text="@string/txt_orders"
+            style="@style/DrawerButtonStyle" />
+
+    </LinearLayout>
+
+    <GridLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="15dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/btn_profile"
+            android:text="@string/txt_edit_profile"
+            style="@style/DrawerMinorButtonStyle" />
+
+        <Button
+            android:id="@+id/btn_logout"
+            android:text="@string/txt_logout"
+            style="@style/DrawerMinorButtonStyle" />
+
+    </GridLayout>
+
+</RelativeLayout>

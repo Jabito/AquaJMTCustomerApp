@@ -90,8 +90,6 @@ public class EditProfileActivity extends AppCompatActivity {
                         .show();
                 return true;
             case R.id.btn_save_changes:
-                RetroFitApiImpl retroFitApi = new RetroFitApiImpl(Api.API_ENDPOINT);
-
                 UpdateCustomerForm updateCustomerForm = new UpdateCustomerForm();
                 updateCustomerForm.setId(customerInfo.getId());
                 updateCustomerForm.setFirstName(txtFirstName.getText().toString());

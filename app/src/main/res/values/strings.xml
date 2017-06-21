@@ -55,4 +55,11 @@
     <string name="php_price_format">PHP %.2f</string>
     <string name="order_summary_sample"><![CDATA[Ordered <water-type> water which costs <price> from <shop-name> <with|without> swapping on <created-date>.]]></string>
     <string name="order_summary_format" formatted="false">Ordered %s water which costs %s from %s %s swapping on %s.</string>
+    <string name="txt_edit_profile">Edit Profile</string>
+    <string name="txt_orders">Orders</string>
+    <string name="txt_enable_location_services">Enable location services</string>
+    <string name="txt_loc_svc_expl">In order to use this application and its features, you are required to enable your device\'s location services.</string>
+    <string name="txt_loc_svc_not_enabled">Location services are not enabled.</string>
+    <string name="txt_go_to_settings">Go to settings</string>
+    <string name="txt_cancel">Cancel</string>
 </resources>

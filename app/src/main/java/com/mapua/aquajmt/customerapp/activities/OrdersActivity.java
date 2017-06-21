@@ -39,12 +39,7 @@ public class OrdersActivity extends AppCompatActivity implements SwipeRefreshLay
     private CustomerInfo customerInfo;
     private RetroFitApiImpl retroFitApi;
 
-    private ArrayList<OrdersAdapter.OrdersArrayAdapterItem> ordersArrayAdapterItems;
     private OrdersAdapter ordersAdapter;
-
-    public OrdersActivity() {
-        ordersArrayAdapterItems = new ArrayList<>();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +56,8 @@ public class OrdersActivity extends AppCompatActivity implements SwipeRefreshLay
         }
 
         if (savedInstanceState == null) {
-            ordersAdapter = new OrdersAdapter(this, ordersArrayAdapterItems);
+            ordersAdapter = new OrdersAdapter(this,
+                    new ArrayList<OrdersAdapter.OrdersArrayAdapterItem>());
         }
 
         registerForContextMenu(lstOrders);
@@ -84,8 +80,8 @@ public class OrdersActivity extends AppCompatActivity implements SwipeRefreshLay
     @Override
     public void onRefresh() {
         ordersAdapter.clear();
-        ordersAdapter.setNotifyOnChange(false);
-        retrievePendingOrders();
+
+        refresh();
     }
 
     @Override
@@ -123,22 +119,30 @@ public class OrdersActivity extends AppCompatActivity implements SwipeRefreshLay
         }
     }
 
+    private ArrayList<OrdersAdapter.OrdersArrayAdapterItem> tempItems;
+
+    private void refresh() {
+        tempItems = new ArrayList<>();
+
+        retrievePendingOrders();
+    }
+
     private void retrievePendingOrders() {
-        ordersArrayAdapterItems.add(new OrdersLabelItem("Pending Orders"));
+        tempItems.add(new OrdersLabelItem("Pending Orders"));
         retroFitApi.getOrders(customerInfo.getId(), "PENDING", new Api.GetOrdersListener() {
             @Override
             public void success(List<OrderInfo> orderInfo) {
                 if (orderInfo.size() == 0)
-                    ordersArrayAdapterItems.add(new OrdersMessageItem("There are no pending orders."));
+                    tempItems.add(new OrdersMessageItem("There are no pending orders."));
                 else
                     for (OrderInfo info : orderInfo)
-                        ordersArrayAdapterItems.add(new OrdersInfoItem(info));
+                        tempItems.add(new OrdersInfoItem(info));
                 retrieveActiveOrders();
             }
 
             @Override
             public void error() {
-                ordersArrayAdapterItems.add(new OrdersErrorItem("There was an error in the retrieval " +
+                tempItems.add(new OrdersErrorItem("There was an error in the retrieval " +
                         "of pending orders."));
                 retrieveActiveOrders();
             }
@@ -146,21 +150,21 @@ public class OrdersActivity extends AppCompatActivity implements SwipeRefreshLay
     }
 
     private void retrieveActiveOrders() {
-        ordersArrayAdapterItems.add(new OrdersLabelItem("Active Orders"));
+        tempItems.add(new OrdersLabelItem("Active Orders"));
         retroFitApi.getOrders(customerInfo.getId(), "ACTIVE", new Api.GetOrdersListener() {
             @Override
             public void success(List<OrderInfo> orderInfo) {
                 if (orderInfo.size() == 0)
-                    ordersArrayAdapterItems.add(new OrdersMessageItem("There are no active orders."));
+                    tempItems.add(new OrdersMessageItem("There are no active orders."));
                 else
                     for (OrderInfo info : orderInfo)
-                        ordersArrayAdapterItems.add(new OrdersInfoItem(info));
+                        tempItems.add(new OrdersInfoItem(info));
                 retrieveCancelledOrders();
             }
 
             @Override
             public void error() {
-                ordersArrayAdapterItems.add(new OrdersErrorItem("There was an error in the retrieval " +
+                tempItems.add(new OrdersErrorItem("There was an error in the retrieval " +
                         "of active orders."));
                 retrieveCancelledOrders();
             }
@@ -168,21 +172,21 @@ public class OrdersActivity extends AppCompatActivity implements SwipeRefreshLay
     }
 
     private void retrieveCancelledOrders() {
-        ordersArrayAdapterItems.add(new OrdersLabelItem("Cancelled Orders"));
+        tempItems.add(new OrdersLabelItem("Cancelled Orders"));
         retroFitApi.getOrders(customerInfo.getId(), "CANCELLED", new Api.GetOrdersListener() {
             @Override
             public void success(List<OrderInfo> orderInfo) {
                 if (orderInfo.size() == 0)
-                    ordersArrayAdapterItems.add(new OrdersMessageItem("There are no cancelled orders."));
+                    tempItems.add(new OrdersMessageItem("There are no cancelled orders."));
                 else
                     for (OrderInfo info : orderInfo)
-                        ordersArrayAdapterItems.add(new OrdersInfoItem(info));
+                        tempItems.add(new OrdersInfoItem(info));
                 retrieveCompletedOrders();
             }
 
             @Override
             public void error() {
-                ordersArrayAdapterItems.add(new OrdersErrorItem("There was an error in the retrieval " +
+                tempItems.add(new OrdersErrorItem("There was an error in the retrieval " +
                         "of cancelled orders."));
                 retrieveCompletedOrders();
             }
@@ -190,21 +194,21 @@ public class OrdersActivity extends AppCompatActivity implements SwipeRefreshLay
     }
 
     private void retrieveCompletedOrders() {
-        ordersArrayAdapterItems.add(new OrdersLabelItem("Completed Orders"));
+        tempItems.add(new OrdersLabelItem("Completed Orders"));
         retroFitApi.getOrders(customerInfo.getId(), "COMPLETED", new Api.GetOrdersListener() {
             @Override
             public void success(List<OrderInfo> orderInfo) {
                 if (orderInfo.size() == 0)
-                    ordersArrayAdapterItems.add(new OrdersMessageItem("There are no completed orders."));
+                    tempItems.add(new OrdersMessageItem("There are no completed orders."));
                 else
                     for (OrderInfo info : orderInfo)
-                        ordersArrayAdapterItems.add(new OrdersInfoItem(info));
+                        tempItems.add(new OrdersInfoItem(info));
                 postCallback();
             }
 
             @Override
             public void error() {
-                ordersArrayAdapterItems.add(new OrdersErrorItem("There was an error in the retrieval " +
+                tempItems.add(new OrdersErrorItem("There was an error in the retrieval " +
                         "of completed orders."));
                 postCallback();
             }
@@ -213,7 +217,10 @@ public class OrdersActivity extends AppCompatActivity implements SwipeRefreshLay
 
     private void postCallback() {
         swipeRefreshLayout.setRefreshing(false);
-        ordersAdapter.setNotifyOnChange(true);
+
+        ordersAdapter.addAll(tempItems);
         ordersAdapter.notifyDataSetChanged();
+
+        tempItems = null;
     }
 }
