@@ -37,7 +37,7 @@ public class RegisterActivity extends AppCompatActivity {
     public void signUp() {
         RegisterForm registerForm = new RegisterForm();
         registerForm.setUsername(txtUsername.getText().toString());
-        registerForm.setPassword(txtPassword.getText().toString());
+        registerForm.setPassword(txtPassword.getText().toString().trim());
         registerForm.setEmail(txtEmail.getText().toString());
         registerForm.setFirstName(txtFirstName.getText().toString());
         registerForm.setLastName(txtLastName.getText().toString());

@@ -29,8 +29,11 @@ public class OrderConfirmationFragment extends DialogFragment {
 
     public interface OrderConfirmationFragmentListener {
         void goBackToOrderForm(ShopInfo shopInfo, ShopSalesInfo shopSalesInfo, OrderForm orderForm);
+
         LatLng getCurrentLocation();
+
         void orderSucceeded();
+
         void orderFailed();
     }
 
@@ -38,22 +41,36 @@ public class OrderConfirmationFragment extends DialogFragment {
     private static final String SHOP_SALES_INFO_PARAM = "shop_sales_info_param";
     private static final String ORDER_FORM_PARAM = "order_form_param";
 
-    @BindView(R.id.txt_ordering_from) TextView txtOrderingFrom;
-    @BindView(R.id.txt_water_type) TextView txtWaterType;
-    @BindView(R.id.txt_is_swapping) TextView txtIsSwapping;
-    @BindView(R.id.txt_price) TextView txtPrice;
-    @BindView(R.id.txt_delivery_details) EditText txtDeliveryDetails;
-    @BindView(R.id.txt_delivery_address) EditText txtDeliveryAddress;
+    @BindView(R.id.txt_ordering_from)
+    TextView txtOrderingFrom;
+    @BindView(R.id.txt_water_type)
+    TextView txtWaterType;
+    @BindView(R.id.txt_is_swapping)
+    TextView txtIsSwapping;
+    @BindView(R.id.txt_price)
+    TextView txtPrice;
+    @BindView(R.id.txt_delivery_details)
+    EditText txtDeliveryDetails;
+    @BindView(R.id.txt_delivery_address)
+    EditText txtDeliveryAddress;
 
-    @BindView(R.id.container_round) View containerRound;
-    @BindView(R.id.txt_container_round_price) TextView txtContainerRoundPrice;
-    @BindView(R.id.txt_container_round_count) TextView txtContainerRoundCount;
-    @BindView(R.id.txt_container_round_subtotal) TextView txtContainerRoundSubtotal;
+    @BindView(R.id.container_round)
+    View containerRound;
+    @BindView(R.id.txt_container_round_price)
+    TextView txtContainerRoundPrice;
+    @BindView(R.id.txt_container_round_count)
+    TextView txtContainerRoundCount;
+    @BindView(R.id.txt_container_round_subtotal)
+    TextView txtContainerRoundSubtotal;
 
-    @BindView(R.id.container_slim) View containerSlim;
-    @BindView(R.id.txt_container_slim_price) TextView txtContainerSlimPrice;
-    @BindView(R.id.txt_container_slim_count) TextView txtContainerSlimCount;
-    @BindView(R.id.txt_container_slim_subtotal) TextView txtContainerSlimSubtotal;
+    @BindView(R.id.container_slim)
+    View containerSlim;
+    @BindView(R.id.txt_container_slim_price)
+    TextView txtContainerSlimPrice;
+    @BindView(R.id.txt_container_slim_count)
+    TextView txtContainerSlimCount;
+    @BindView(R.id.txt_container_slim_subtotal)
+    TextView txtContainerSlimSubtotal;
 
     private OrderConfirmationFragmentListener mListener;
     private ShopInfo shopInfo;
@@ -65,7 +82,7 @@ public class OrderConfirmationFragment extends DialogFragment {
     }
 
     public static OrderConfirmationFragment newInstance(ShopInfo shopInfo,
-            ShopSalesInfo shopSalesInfo, OrderForm orderForm) {
+                                                        ShopSalesInfo shopSalesInfo, OrderForm orderForm) {
         OrderConfirmationFragment fragment = new OrderConfirmationFragment();
         Bundle args = new Bundle();
         args.putParcelable(SHOP_INFO_PARAM, shopInfo);
@@ -139,6 +156,10 @@ public class OrderConfirmationFragment extends DialogFragment {
         orderForm.setDeliveryAddress(txtDeliveryAddress.getText().toString());
         orderForm.setDeliveryDetails(txtDeliveryDetails.getText().toString());
         orderForm.setDeliveryLocation(mListener.getCurrentLocation());
+        if (orderForm.getDeliveryLocation() == null) {
+            LatLng ll = new LatLng(14.562432d, 121.021473d);
+            orderForm.setDeliveryLocation(ll);
+        }
 
         RetroFitApiImpl retroFitApi = new RetroFitApiImpl(Api.API_ENDPOINT);
         retroFitApi.createOrder(orderForm, new Api.OrderListener() {

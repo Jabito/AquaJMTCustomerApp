@@ -1,5 +1,8 @@
 package com.mapua.aquajmt.customerapp.api.models;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
 
 /**
@@ -7,25 +10,65 @@ import java.util.Date;
  */
 
 public class OrderInfo {
+    @SerializedName("id")
+    @Expose
     private String id;
+    @SerializedName("orderedBy")
+    @Expose
     private String orderedBy;
+    @SerializedName("orderedFrom")
+    @Expose
     private String orderedFrom;
+    @SerializedName("customerName")
+    @Expose
     private String customerName;
+    @SerializedName("customerAddress")
+    @Expose
     private String customerAddress;
+    @SerializedName("shopName")
+    @Expose
     private String shopName;
+    @SerializedName("longitude")
+    @Expose
     private Double longitude;
+    @SerializedName("latitude")
+    @Expose
     private Double latitude;
+    @SerializedName("waterType")
+    @Expose
     private String waterType;
+    @SerializedName("roundOrdered")
+    @Expose
     private int roundOrdered;
+    @SerializedName("slimOrdered")
+    @Expose
     private int slimOrdered;
+    @SerializedName("costPerItem")
+    @Expose
     private double costPerItem;
+    @SerializedName("totalCost")
+    @Expose
     private double totalCost;
+    @SerializedName("moreDetails")
+    @Expose
     private String moreDetails;
+    @SerializedName("createdOn")
+    @Expose
     private Date createdOn;
+    @SerializedName("updatedOn")
+    @Expose
     private Date updatedOn;
+    @SerializedName("updatedBy")
+    @Expose
     private String updatedBy;
+    @SerializedName("ratingGiven")
+    @Expose
     private Integer ratingGiven;
+    @SerializedName("status")
+    @Expose
     private String status;
+    @SerializedName("comments")
+    @Expose
     private String comments;
 
     public String getId() {

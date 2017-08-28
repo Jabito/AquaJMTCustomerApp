@@ -1,14 +1,13 @@
 package com.mapua.aquajmt.customerapp.api.retrofit;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.gson.GsonBuilder;
 import com.mapua.aquajmt.customerapp.api.Api;
-import com.mapua.aquajmt.customerapp.api.models.OrderInfo;
-import com.mapua.aquajmt.customerapp.api.models.OrderJson;
-import com.mapua.aquajmt.customerapp.api.models.RateOrderForm;
 import com.mapua.aquajmt.customerapp.api.models.CustomerInfo;
 import com.mapua.aquajmt.customerapp.api.models.LoginForm;
 import com.mapua.aquajmt.customerapp.api.models.OrderForm;
+import com.mapua.aquajmt.customerapp.api.models.OrderInfo;
+import com.mapua.aquajmt.customerapp.api.models.OrderJson;
+import com.mapua.aquajmt.customerapp.api.models.RateOrderForm;
 import com.mapua.aquajmt.customerapp.api.models.RegisterForm;
 import com.mapua.aquajmt.customerapp.api.models.UpdateCustomerForm;
 import com.mapua.aquajmt.customerapp.models.ShopInfo;
@@ -68,10 +67,14 @@ public class RetroFitApiImpl extends Api {
                         customerInfo.setMiddleName(customerInfoJson.getString("middleName"));
                         customerInfo.setCellphoneNo(customerInfoJson.getString("cellphoneNo"));
                         customerInfo.setLandline(customerInfoJson.getString("landline"));
-                        customerInfo.setCreatedOn(Api.SIMPLE_DATETIME_FORMAT
-                                .parse(customerInfoJson.getString("createdOn")));
-                        customerInfo.setCreatedOn(Api.SIMPLE_DATETIME_FORMAT
-                                .parse(customerInfoJson.getString("updatedOn")));
+                        if (customerInfoJson.getString("createdOn") != null) {
+                            customerInfo.setCreatedOn(Api.SIMPLE_DATETIME_FORMAT
+                                    .parse(customerInfoJson.getString("createdOn")));
+                        }
+                        if (customerInfoJson.getString("updatedOn") != null) {
+                            customerInfo.setCreatedOn(Api.SIMPLE_DATETIME_FORMAT
+                                    .parse(customerInfoJson.getString("updatedOn")));
+                        }
                         loginListener.success(customerInfo);
 
                     } else if (response.code() == 403) {
@@ -100,7 +103,7 @@ public class RetroFitApiImpl extends Api {
                 try {
                     if (response.code() == 200 && response.body() != null) {
                         JSONObject responseJson = new JSONObject(response.body().string());
-                        JSONObject customerInfoJson = responseJson.getJSONObject("customerInfo");
+                        JSONObject customerInfoJson = responseJson.getJSONObject("customer");
 
                         CustomerInfo customerInfo = new CustomerInfo();
                         customerInfo.setId(customerInfoJson.getString("id"));
@@ -112,18 +115,13 @@ public class RetroFitApiImpl extends Api {
                         customerInfo.setMiddleName(customerInfoJson.getString("middleName"));
                         customerInfo.setCellphoneNo(customerInfoJson.getString("cellphoneNo"));
                         customerInfo.setLandline(customerInfoJson.getString("landline"));
-                        customerInfo.setCreatedOn(customerInfoJson.get("createdOn") != null ?
-                                Api.SIMPLE_DATETIME_FORMAT.parse(customerInfoJson.getString("createdOn")) : null);
-                        customerInfo.setCreatedOn(customerInfoJson.get("updatedOn") != null ?
-                                Api.SIMPLE_DATETIME_FORMAT.parse(customerInfoJson.getString("updatedOn")) : null);
                         registerListener.success(customerInfo);
-
                     } else if (response.code() == 409) {
                         registerListener.usernameOrEmailAlreadyTaken();
                     } else {
                         registerListener.error();
                     }
-                } catch (JSONException | IOException | ParseException e) {
+                } catch (JSONException | IOException e) {
                     e.printStackTrace();
                     registerListener.error();
                 }
@@ -243,49 +241,49 @@ public class RetroFitApiImpl extends Api {
                 bottomLeft.longitude, bottomLeft.latitude).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    try {
-                        if (response.code() == 200 && response.body() != null) {
-                            JSONObject responseJson = new JSONObject(response.body().string());
-                            JSONArray shopsJson = responseJson.getJSONArray("shops");
+                try {
+                    if (response.code() == 200 && response.body() != null) {
+                        JSONObject responseJson = new JSONObject(response.body().string());
+                        JSONArray shopsJson = responseJson.getJSONArray("shops");
 
-                            ArrayList<ShopInfo> shopInfos = new ArrayList<>();
-                            for (int i = 0; i < shopsJson.length(); i++) {
-                                JSONObject shopInfoJson = shopsJson.getJSONObject(i);
+                        ArrayList<ShopInfo> shopInfos = new ArrayList<>();
+                        for (int i = 0; i < shopsJson.length(); i++) {
+                            JSONObject shopInfoJson = shopsJson.getJSONObject(i);
 
-                                ShopInfo shopInfo = new ShopInfo();
-                                shopInfo.setId(shopInfoJson.getString("id"));
-                                shopInfo.setBusinessName(shopInfoJson.getString("businessName"));
-                                shopInfo.setAddress(shopInfoJson.getString("address"));
-                                shopInfo.setCellphoneNo(shopInfoJson.getString("cellphoneNo"));
-                                shopInfo.setAlternateNo(shopInfoJson.getString("alternateNo"));
-                                shopInfo.setTimeOpen(Api.SIMPLE_TIME_FORMAT.parse(
-                                        shopInfoJson.getString("timeOpen")));
-                                shopInfo.setTimeClose(Api.SIMPLE_TIME_FORMAT.parse(
-                                        shopInfoJson.getString("timeClose")));
-                                shopInfo.setAllowSwap(shopInfoJson.getBoolean("allowSwap"));
-                                shopInfo.setAccountVerified(shopInfoJson.getBoolean("accountVerified"));
-                                shopInfo.setDaysAvailable(shopInfoJson.getString("daysAvailable"));
-                                shopInfo.setOpenOnHolidays(shopInfoJson.getBoolean("openOnHolidays"));
-                                shopInfo.setCreatedOn(shopInfoJson.get("createdOn") != null ?
-                                        Api.SIMPLE_DATETIME_FORMAT.parse(shopInfoJson.getString("createdOn")) : null);
-                                shopInfo.setUpdatedOn(shopInfoJson.get("updatedOn") != null && !shopInfoJson.getString("updatedOn").equals("null") ?
-                                        Api.SIMPLE_DATETIME_FORMAT.parse(shopInfoJson.getString("updatedOn")) : null);
-                                shopInfo.setUpdatedBy(shopInfoJson.getString("updatedBy"));
-                                shopInfo.setLocation(new LatLng(shopInfoJson.getDouble("latitude"),
-                                        shopInfoJson.getDouble("longitude")));
-                                shopInfo.setRating(shopInfoJson.getDouble("rating"));
+                            ShopInfo shopInfo = new ShopInfo();
+                            shopInfo.setId(shopInfoJson.getString("id"));
+                            shopInfo.setBusinessName(shopInfoJson.getString("businessName"));
+                            shopInfo.setAddress(shopInfoJson.getString("address"));
+                            shopInfo.setCellphoneNo(shopInfoJson.getString("cellphoneNo"));
+                            shopInfo.setAlternateNo(shopInfoJson.getString("alternateNo"));
+                            shopInfo.setTimeOpen(Api.SIMPLE_TIME_FORMAT.parse(
+                                    shopInfoJson.getString("timeOpen")));
+                            shopInfo.setTimeClose(Api.SIMPLE_TIME_FORMAT.parse(
+                                    shopInfoJson.getString("timeClose")));
+                            shopInfo.setAllowSwap(shopInfoJson.getBoolean("allowSwap"));
+                            shopInfo.setAccountVerified(shopInfoJson.getBoolean("accountVerified"));
+                            shopInfo.setDaysAvailable(shopInfoJson.getString("daysAvailable"));
+                            shopInfo.setOpenOnHolidays(shopInfoJson.getBoolean("openOnHolidays"));
+                            shopInfo.setCreatedOn(shopInfoJson.get("createdOn") != null ?
+                                    Api.SIMPLE_DATETIME_FORMAT.parse(shopInfoJson.getString("createdOn")) : null);
+                            shopInfo.setUpdatedOn(shopInfoJson.get("updatedOn") != null && !shopInfoJson.getString("updatedOn").equals("null") ?
+                                    Api.SIMPLE_DATETIME_FORMAT.parse(shopInfoJson.getString("updatedOn")) : null);
+                            shopInfo.setUpdatedBy(shopInfoJson.getString("updatedBy"));
+                            shopInfo.setLocation(new LatLng(shopInfoJson.getDouble("latitude"),
+                                    shopInfoJson.getDouble("longitude")));
+                            shopInfo.setRating(shopInfoJson.getDouble("rating"));
 
-                                shopInfos.add(shopInfo);
-                            }
-
-                            findShopsByBoundsListener.success(shopInfos);
-                        } else {
-                            findShopsByBoundsListener.error();
+                            shopInfos.add(shopInfo);
                         }
-                    } catch (JSONException | ParseException | IOException e) {
-                        e.printStackTrace();
+
+                        findShopsByBoundsListener.success(shopInfos);
+                    } else {
                         findShopsByBoundsListener.error();
                     }
+                } catch (JSONException | ParseException | IOException e) {
+                    e.printStackTrace();
+                    findShopsByBoundsListener.error();
+                }
             }
 
             @Override
@@ -381,7 +379,7 @@ public class RetroFitApiImpl extends Api {
                             orderInfo.setMoreDetails(orderInfoJson.getString("moreDetails"));
                             orderInfo.setCreatedOn(orderInfoJson.get("createdOn") != null ?
                                     Api.SIMPLE_DATETIME_FORMAT.parse(orderInfoJson.getString("createdOn")) : null);
-                            orderInfo.setUpdatedOn(orderInfoJson.get("updatedOn") != null && !orderInfoJson.getString("updatedOn").equals("null")  ?
+                            orderInfo.setUpdatedOn(orderInfoJson.get("updatedOn") != null && !orderInfoJson.getString("updatedOn").equals("null") ?
                                     Api.SIMPLE_DATETIME_FORMAT.parse(orderInfoJson.getString("updatedOn")) : null);
                             orderInfo.setUpdatedBy(orderInfoJson.getString("updatedBy"));
                             orderInfo.setRatingGiven(orderInfoJson.optInt("ratingGiven"));
