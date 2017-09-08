@@ -21,17 +21,17 @@ import java.util.Locale;
 public abstract class Api {
 
     public static final String API_ENDPOINT = "http://10.0.2.2:8081";
-//    public static final String API_ENDPOINT = "http://www.aquajmt.com:8081";
-    public static final String LOGIN_ENDPOINT = "/api/loginCustomer";
-    public static final String REGISTER_ENDPOINT = "/api/addCustomerLogin";
-    public static final String FORGOT_PASSWORD_ENDPOINT = "/api/forgotPasswordCustomer";
-    public static final String UPDATE_CUSTOMER_ENDPOINT = "/api/updateCustomerLogin";
-    public static final String CREATE_ORDER_ENDPOINT = "/api/addOrderInfo";
-    public static final String RATE_ORDER_ENDPOINT = "/api/rateOrder";
-    public static final String FIND_SHOPS_ENDPOINT = "/api/findShopsByBounds";
-    public static final String GET_ORDERS_BY_STATUS_AND_CUSTOMER_ID = "/api/getOrdersByStatusAndCustomerId";
-    public static final String GET_SHOP_INFO_ENDPOINT = "/api/shop/info";
-    public static final String GET_SHOP_SALES_INFO_ENDPOINT = "/api/shop/sales/information";
+//    public static final String API_ENDPOINT = "http://www.aquajmt.com:8081/";
+    public static final String LOGIN_ENDPOINT = "api/loginCustomer";
+    public static final String REGISTER_ENDPOINT = "api/addCustomerLogin";
+    public static final String FORGOT_PASSWORD_ENDPOINT = "api/forgotPasswordCustomer";
+    public static final String UPDATE_CUSTOMER_ENDPOINT = "api/updateCustomerLogin";
+    public static final String CREATE_ORDER_ENDPOINT = "api/addOrderInfo";
+    public static final String RATE_ORDER_ENDPOINT = "api/rateOrder";
+    public static final String FIND_SHOPS_ENDPOINT = "api/findShopsByBounds";
+    public static final String GET_ORDERS_BY_STATUS_AND_CUSTOMER_ID = "api/getOrdersByStatusAndCustomerId";
+    public static final String GET_SHOP_INFO_ENDPOINT = "api/shop/info";
+    public static final String GET_SHOP_SALES_INFO_ENDPOINT = "api/shop/sales/information";
 
     public static final SimpleDateFormat SIMPLE_DATETIME_FORMAT
             = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault());

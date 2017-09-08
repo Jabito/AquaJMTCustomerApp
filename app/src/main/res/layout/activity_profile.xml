@@ -199,6 +199,12 @@
             </LinearLayout>
 
         </LinearLayout>
+        <Button
+            android:id="@+id/btn_update_profile"
+            android:layout_width="match_parent"
+            android:backgroundTint="@color/colorAccent"
+            android:layout_height="wrap_content"
+            android:text="Update Profile"/>
 
     </LinearLayout>
 

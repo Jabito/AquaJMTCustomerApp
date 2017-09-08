@@ -60,6 +60,10 @@ import com.mapua.aquajmt.customerapp.utils.VectorDrawableUtils;
 import java.util.HashMap;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 @SuppressWarnings("MissingPermission")
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
         View.OnClickListener, LocationListener, GoogleApiClient.ConnectionCallbacks,
@@ -73,7 +77,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR : 0;
     private static final int UI_FLAGS =
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
 
     private MapFragment mapFragment;
     private GoogleMap googleMap;
@@ -89,8 +93,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ImageButton btnPrevStore;
     private ImageButton btnGoToLocation;
     private Button btnUserOrders;
-    private Button btnProfile;
     private Button btnLogout;
+
+    @BindView(R.id.btn_profile)
+    Button btnProfile;
 
     private View storeInfoFragmentContainer;
     private ShopInfoFragment shopInfoFragment;
@@ -110,6 +116,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        ButterKnife.bind(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             final Window window = getWindow();
@@ -139,7 +147,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         btnPrevStore.setOnClickListener(this);
         btnGoToLocation.setOnClickListener(this);
 
-        btnProfile = (Button) findViewById(R.id.btn_profile);
         btnUserOrders = (Button) findViewById(R.id.btn_user_orders);
         btnLogout = (Button) findViewById(R.id.btn_logout);
 
@@ -199,7 +206,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()) {
+        switch (v.getId()) {
             case R.id.btn_prev_store:
                 break;
             case R.id.btn_go_to_location:
@@ -208,9 +215,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 break;
             case R.id.btn_user_orders:
                 startActivity(new Intent(this, OrdersActivity.class));
-                break;
-            case R.id.btn_profile:
-                startActivity(new Intent(this, EditProfileActivity.class));
                 break;
             case R.id.btn_logout:
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -234,6 +238,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         .show();
                 break;
         }
+    }
+
+    @OnClick(R.id.btn_profile)
+    void btnProfileOnClick() {
+        startActivity(new Intent(MapsActivity.this, EditProfileActivity.class));
+        finish();
     }
 
     @Override
@@ -293,10 +303,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
-    public void onConnectionSuspended(int i) { }
+    public void onConnectionSuspended(int i) {
+    }
 
     @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) { }
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    }
 
     @Override
     public void onLocationChanged(Location location) {
@@ -317,8 +329,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
     }
 
-    public Bitmap resizeMapIcons(String iconName, int width, int height){
-        Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(),getResources().getIdentifier(iconName, "drawable", getPackageName()));
+    public Bitmap resizeMapIcons(String iconName, int width, int height) {
+        Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), getResources().getIdentifier(iconName, "drawable", getPackageName()));
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
         return resizedBitmap;
     }
@@ -463,7 +475,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onDrawerSlide(View drawerView, float slideOffset) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(Color.argb((int)(slideOffset * 255), 0, 0, 0));
+            getWindow().setStatusBarColor(Color.argb((int) (slideOffset * 255), 0, 0, 0));
 
             if (slideOffset >= 0.5f) { // open
                 getWindow().getDecorView().setSystemUiVisibility(UI_FLAGS);
@@ -488,7 +500,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
-    public void onDrawerStateChanged(int newState) { }
+    public void onDrawerStateChanged(int newState) {
+    }
 
     private void setCurrentShopInfo(ShopInfo shopInfo, ShopSalesInfo shopSalesInfo) {
         if (shopInfo != null && shopSalesInfo != null) {

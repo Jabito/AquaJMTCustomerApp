@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.mapua.aquajmt.customerapp.R;
@@ -153,27 +154,33 @@ public class OrderConfirmationFragment extends DialogFragment {
 
     @OnClick(R.id.btn_confirm_order)
     public void confirmOrder() {
-        orderForm.setDeliveryAddress(txtDeliveryAddress.getText().toString());
-        orderForm.setDeliveryDetails(txtDeliveryDetails.getText().toString());
-        orderForm.setDeliveryLocation(mListener.getCurrentLocation());
-        if (orderForm.getDeliveryLocation() == null) {
-            LatLng ll = new LatLng(14.562432d, 121.021473d);
-            orderForm.setDeliveryLocation(ll);
+        String deliveryAddress = txtDeliveryAddress.getText().toString();
+        String deliveryDetails = txtDeliveryDetails.getText().toString();
+        if (deliveryAddress.equals("") || deliveryDetails.equals(""))
+            Toast.makeText(getContext(), "Complete all fields.", Toast.LENGTH_SHORT).show();
+        else {
+            orderForm.setDeliveryAddress(deliveryAddress);
+            orderForm.setDeliveryDetails(deliveryDetails);
+            orderForm.setDeliveryLocation(mListener.getCurrentLocation());
+            if (orderForm.getDeliveryLocation() == null) {
+                LatLng ll = new LatLng(14.562432d, 121.021473d);
+                orderForm.setDeliveryLocation(ll);
+            }
+
+            RetroFitApiImpl retroFitApi = new RetroFitApiImpl(Api.API_ENDPOINT);
+            retroFitApi.createOrder(orderForm, new Api.OrderListener() {
+                @Override
+                public void success() {
+                    OrderConfirmationFragment.this.dismiss();
+                    mListener.orderSucceeded();
+                }
+
+                @Override
+                public void error() {
+                    mListener.orderFailed();
+                }
+            });
         }
-
-        RetroFitApiImpl retroFitApi = new RetroFitApiImpl(Api.API_ENDPOINT);
-        retroFitApi.createOrder(orderForm, new Api.OrderListener() {
-            @Override
-            public void success() {
-                OrderConfirmationFragment.this.dismiss();
-                mListener.orderSucceeded();
-            }
-
-            @Override
-            public void error() {
-                mListener.orderFailed();
-            }
-        });
     }
 
     public void goBackToOrderForm() {

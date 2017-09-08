@@ -44,7 +44,7 @@ public class RetroFitApiImpl extends Api {
     }
 
     @Override
-    public void login(String username, String password, final LoginListener loginListener) {
+    public void login(String username, String password, final Api.LoginListener loginListener) {
         LoginForm loginForm = new LoginForm();
         loginForm.setUsername(username);
         loginForm.setPassword(password);
@@ -67,11 +67,11 @@ public class RetroFitApiImpl extends Api {
                         customerInfo.setMiddleName(customerInfoJson.getString("middleName"));
                         customerInfo.setCellphoneNo(customerInfoJson.getString("cellphoneNo"));
                         customerInfo.setLandline(customerInfoJson.getString("landline"));
-                        if (customerInfoJson.getString("createdOn") != null) {
+                        if (customerInfoJson.getString("createdOn") != null && !customerInfoJson.getString("createdOn").equals("")) {
                             customerInfo.setCreatedOn(Api.SIMPLE_DATETIME_FORMAT
                                     .parse(customerInfoJson.getString("createdOn")));
                         }
-                        if (customerInfoJson.getString("updatedOn") != null) {
+                        if (!customerInfoJson.getString("updatedOn").equals("null") && !customerInfoJson.getString("updatedOn").equals("")) {
                             customerInfo.setCreatedOn(Api.SIMPLE_DATETIME_FORMAT
                                     .parse(customerInfoJson.getString("updatedOn")));
                         }
@@ -96,7 +96,7 @@ public class RetroFitApiImpl extends Api {
     }
 
     @Override
-    public void register(RegisterForm registerForm, final RegisterListener registerListener) {
+    public void register(RegisterForm registerForm, final Api.RegisterListener registerListener) {
         apiService.register(registerForm).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

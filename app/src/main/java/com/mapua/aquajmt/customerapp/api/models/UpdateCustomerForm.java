@@ -1,6 +1,7 @@
 package com.mapua.aquajmt.customerapp.api.models;
 
-import java.util.Date;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by Bryan on 6/13/2017.
@@ -8,17 +9,30 @@ import java.util.Date;
 
 public class UpdateCustomerForm {
 
+    @SerializedName("id")
+    @Expose
     private String id;
+    @SerializedName("username")
+    @Expose
     private String username;
+    @SerializedName("email")
+    @Expose
     private String email;
+    @SerializedName("firstName")
+    @Expose
     private String firstName;
+    @SerializedName("lastName")
+    @Expose
     private String lastName;
+    @SerializedName("middleName")
+    @Expose
     private String middleName;
-    private String password;
+    @SerializedName("cellphoneNo")
+    @Expose
     private String cellphoneNo;
+    @SerializedName("landline")
+    @Expose
     private String landline;
-    private Date createdOn;
-    private Date updatedOn;
 
     public String getId() {
         return id;
@@ -68,14 +82,6 @@ public class UpdateCustomerForm {
         this.middleName = middleName;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getCellphoneNo() {
         return cellphoneNo;
     }
@@ -92,19 +98,4 @@ public class UpdateCustomerForm {
         this.landline = landline;
     }
 
-    public Date getCreatedOn() {
-        return createdOn;
-    }
-
-    public void setCreatedOn(Date createdOn) {
-        this.createdOn = createdOn;
-    }
-
-    public Date getUpdatedOn() {
-        return updatedOn;
-    }
-
-    public void setUpdatedOn(Date updatedOn) {
-        this.updatedOn = updatedOn;
-    }
 }

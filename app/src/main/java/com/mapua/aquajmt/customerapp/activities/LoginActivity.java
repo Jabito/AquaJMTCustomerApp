@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mapua.aquajmt.customerapp.R;
@@ -20,6 +21,8 @@ public class LoginActivity extends AppCompatActivity {
 
     @BindView(R.id.txt_username) EditText txtUsername;
     @BindView(R.id.txt_password) EditText txtPassword;
+    @BindView(R.id.lbl_acct_inaccessible)
+    TextView txtAccountInaccessible;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     public void login() {
         RetroFitApiImpl retroFitApi = new RetroFitApiImpl(Api.API_ENDPOINT);
         retroFitApi.login(txtUsername.getText().toString(),
-                txtPassword.getText().toString(),
+                txtPassword.getText().toString().trim(),
                 new Api.LoginListener() {
                     @Override
                     public void success(CustomerInfo customerInfo) {
@@ -62,5 +65,10 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @OnClick(R.id.lbl_acct_inaccessible)
+    public void inaccessibleAcountOnClick(){
+
     }
 }

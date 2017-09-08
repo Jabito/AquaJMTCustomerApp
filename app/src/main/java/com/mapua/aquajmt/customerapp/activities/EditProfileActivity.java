@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,8 @@ public class EditProfileActivity extends AppCompatActivity {
     @BindView(R.id.txt_last_name) EditText txtLastName;
     @BindView(R.id.txt_cellphone_no) EditText txtCellphoneNo;
     @BindView(R.id.txt_landline) EditText txtLandline;
+    @BindView(R.id.btn_update_profile)
+    Button updateProfile;
 
     private RetroFitApiImpl retroFitApi;
     private CustomerInfo customerInfo;

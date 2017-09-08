@@ -10,6 +10,6 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:scaleType="fitXY"
-        tools:src="@mipmap/sample_image"/>
+        tools:src="@drawable/logo"/>
 
 </RelativeLayout>

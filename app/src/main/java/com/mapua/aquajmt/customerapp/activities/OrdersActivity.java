@@ -33,13 +33,16 @@ import butterknife.ButterKnife;
 
 public class OrdersActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
-    @BindView(R.id.swipe_layout) SwipeRefreshLayout swipeRefreshLayout;
-    @BindView(R.id.lst_orders) ListView lstOrders;
+    @BindView(R.id.swipe_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.lst_orders)
+    ListView lstOrders;
 
     private CustomerInfo customerInfo;
     private RetroFitApiImpl retroFitApi;
 
     private OrdersAdapter ordersAdapter;
+    private RateOrderFragment rateOrderFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,20 @@ public class OrdersActivity extends AppCompatActivity implements SwipeRefreshLay
 
         registerForContextMenu(lstOrders);
         lstOrders.setAdapter(ordersAdapter);
+        lstOrders.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(getApplicationContext(), "Click pos " + i, Toast.LENGTH_SHORT).show();
+                if (ordersAdapter.getItem(i) instanceof OrdersInfoItem) {
+                    OrdersInfoItem oaai = (OrdersInfoItem) ordersAdapter.getItem(i);
+                    rateOrderFragment = RateOrderFragment.newInstance(oaai.getOrderInfo().getOrderedFrom(), oaai.getOrderInfo().getId());
+
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.container_fragment, rateOrderFragment, "RATE_ORDER_FRAG_TAG")
+                            .commit();
+                }
+            }
+        });
         swipeRefreshLayout.setOnRefreshListener(this);
     }
 
