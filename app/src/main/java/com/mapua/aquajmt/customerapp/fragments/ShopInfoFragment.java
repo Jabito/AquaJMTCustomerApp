@@ -12,13 +12,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.mapua.aquajmt.customerapp.R;
 import com.mapua.aquajmt.customerapp.activities.LoginActivity;
 import com.mapua.aquajmt.customerapp.api.Api;
 import com.mapua.aquajmt.customerapp.api.retrofit.RetroFitApiImpl;
+import com.mapua.aquajmt.customerapp.models.Notification;
 import com.mapua.aquajmt.customerapp.models.ShopInfo;
 import com.mapua.aquajmt.customerapp.models.ShopSalesInfo;
 import com.mapua.aquajmt.customerapp.utils.DateTimeUtils;
+import com.mapua.aquajmt.customerapp.utils.SharedPref;
 import com.mapua.aquajmt.customerapp.utils.ShopInfoUtils;
 
 import java.util.Locale;
@@ -62,6 +67,9 @@ public class ShopInfoFragment extends Fragment {
     private StoreInfoFragmentListener mListener;
     private boolean isMoreStoreInfoShown = false;
 
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
+
     public ShopInfoFragment() {
         // Required empty public constructor
     }
@@ -71,6 +79,10 @@ public class ShopInfoFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_store_info, container, false);
         ButterKnife.bind(this, view);
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("messages");
+
         return view;
     }
 
@@ -94,6 +106,8 @@ public class ShopInfoFragment extends Fragment {
     @OnClick(R.id.btn_more_info)
     public void onClickBtnViewMore() {
         toggleMoreInfo();
+        subscribeToTopic();
+        sendMessage();
     }
 
     @OnClick(R.id.btn_order)
@@ -104,6 +118,9 @@ public class ShopInfoFragment extends Fragment {
     public void setStoreInView(ShopInfo shopInfo) {
         if (shopInfo == null)
             throw new IllegalStateException("The shopInfo cannot be null.");
+
+        //TODO: re code after confirmation
+        SharedPref.setStringValue(SharedPref.SHOP,SharedPref.SELECTED_SHOP_ID,shopInfo.getId(),getActivity());
 
         txtName.setText(shopInfo.getBusinessName());
         txtAddress.setText(shopInfo.getAddress());
@@ -195,5 +212,20 @@ public class ShopInfoFragment extends Fragment {
                 throw new IllegalArgumentException("The value of the `starChar` " +
                         "parameter is not acceptable.");
         }
+    }
+
+
+    //TODO: re code after confirmation
+    public void subscribeToTopic() {
+        FirebaseMessaging.getInstance().subscribeToTopic("notifications");
+        Toast.makeText(getActivity(), "Subscribed to Topic: Notifications", Toast.LENGTH_SHORT).show();
+    }
+
+    //TODO: re code after confirmation
+    public void sendMessage() {
+        String userID = SharedPref.getStringValue(SharedPref.USER,SharedPref.USER_ID,getActivity());
+        String shopID = SharedPref.getStringValue(SharedPref.SHOP,SharedPref.SELECTED_SHOP_ID,getActivity());
+        databaseReference.push().setValue(new Notification("Test Title", "Test Details", userID,shopID));
+        Toast.makeText(getActivity(), "Message Sent", Toast.LENGTH_SHORT).show();
     }
 }
