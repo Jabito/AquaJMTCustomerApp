@@ -115,4 +115,9 @@ public abstract class Api {
         void success();
         void error();
     }
+
+    public interface TermsAndCondition {
+        void accept();
+        void cancel();
+    }
 }
