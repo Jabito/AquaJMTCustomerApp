@@ -20,8 +20,8 @@ import java.util.Locale;
 
 public abstract class Api {
 
-    public static final String API_ENDPOINT = "http://10.0.2.2:8081";
-//    public static final String API_ENDPOINT = "http://www.aquajmt.com:8081/";
+//    public static final String API_ENDPOINT = "http://10.0.2.2:8081";
+    public static final String API_ENDPOINT = "http://www.aquajmt.com:8081/";
     public static final String LOGIN_ENDPOINT = "api/loginCustomer";
     public static final String REGISTER_ENDPOINT = "api/addCustomerLogin";
     public static final String FORGOT_PASSWORD_ENDPOINT = "api/forgotPasswordCustomer";
@@ -106,5 +106,10 @@ public abstract class Api {
     public interface CommonListener {
         void success();
         void error();
+    }
+
+    public interface TermsAndCondition {
+        void accept();
+        void cancel();
     }
 }

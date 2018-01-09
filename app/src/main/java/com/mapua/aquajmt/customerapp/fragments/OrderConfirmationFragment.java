@@ -33,7 +33,7 @@ public class OrderConfirmationFragment extends DialogFragment {
 
         LatLng getCurrentLocation();
 
-        void orderSucceeded();
+        void orderSucceeded(String deliveryDetails);
 
         void orderFailed();
     }
@@ -155,7 +155,7 @@ public class OrderConfirmationFragment extends DialogFragment {
     @OnClick(R.id.btn_confirm_order)
     public void confirmOrder() {
         String deliveryAddress = txtDeliveryAddress.getText().toString();
-        String deliveryDetails = txtDeliveryDetails.getText().toString();
+        final String deliveryDetails = txtDeliveryDetails.getText().toString();
         if (deliveryAddress.equals("") || deliveryDetails.equals(""))
             Toast.makeText(getContext(), "Complete all fields.", Toast.LENGTH_SHORT).show();
         else {
@@ -172,7 +172,7 @@ public class OrderConfirmationFragment extends DialogFragment {
                 @Override
                 public void success() {
                     OrderConfirmationFragment.this.dismiss();
-                    mListener.orderSucceeded();
+                    mListener.orderSucceeded(deliveryDetails);
                 }
 
                 @Override

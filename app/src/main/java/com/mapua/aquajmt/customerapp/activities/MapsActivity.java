@@ -44,6 +44,9 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.mapua.aquajmt.customerapp.R;
 import com.mapua.aquajmt.customerapp.api.Api;
 import com.mapua.aquajmt.customerapp.api.models.OrderForm;
@@ -52,9 +55,12 @@ import com.mapua.aquajmt.customerapp.fragments.LoadingFragment;
 import com.mapua.aquajmt.customerapp.fragments.OrderConfirmationFragment;
 import com.mapua.aquajmt.customerapp.fragments.OrderFragment;
 import com.mapua.aquajmt.customerapp.fragments.ShopInfoFragment;
+import com.mapua.aquajmt.customerapp.models.Notification;
 import com.mapua.aquajmt.customerapp.models.ShopInfo;
 import com.mapua.aquajmt.customerapp.models.ShopSalesInfo;
 import com.mapua.aquajmt.customerapp.sqlite.LoginDbHelper;
+import com.mapua.aquajmt.customerapp.utils.Constant;
+import com.mapua.aquajmt.customerapp.utils.SharedPref;
 import com.mapua.aquajmt.customerapp.utils.VectorDrawableUtils;
 
 import java.util.HashMap;
@@ -108,6 +114,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean isFromViewShopInfo = false;
     private LatLng currentLocation;
 
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
+
+
+    
     public MapsActivity() {
         this.markerMapById = new HashMap<>();
     }
@@ -118,7 +129,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_maps);
 
         ButterKnife.bind(this);
-
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference(Constant.ROOT_DATA);
+        
+        
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             final Window window = getWindow();
             window.getDecorView().setSystemUiVisibility(UI_FLAGS | LIGHT_STATUS_BAR_FLAG);
@@ -463,8 +477,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
-    public void orderSucceeded() {
+    public void orderSucceeded(String deliveryDetails) {
         Toast.makeText(this, "Order was successfully sent.", Toast.LENGTH_SHORT).show();
+
+        subscribeToTopic();
+        sendMessage(deliveryDetails);
+    
     }
 
     @Override
@@ -546,5 +564,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     })
                     .show();
         }
+    }
+
+
+
+    //used to send topic in notif
+    public void subscribeToTopic() {
+        FirebaseMessaging.getInstance().subscribeToTopic("notifications");
+//        Toast.makeText(this, "Subscribed to Topic: Notifications", Toast.LENGTH_SHORT).show();
+    }
+
+
+    //used to send send the message
+    public void sendMessage(String deliveryDetails) {
+        String userId = SharedPref.getStringValue(SharedPref.USER,SharedPref.USER_ID,MapsActivity.this);
+        String shopId = SharedPref.getStringValue(SharedPref.USER,SharedPref.SHOP_ID,MapsActivity.this);
+
+        databaseReference.push().setValue(new Notification(userId +" ~ "+ shopId, deliveryDetails));
+//        Toast.makeText(this, "Notification Sent", Toast.LENGTH_SHORT).show();
     }
 }

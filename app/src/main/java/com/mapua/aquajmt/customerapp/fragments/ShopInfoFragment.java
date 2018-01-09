@@ -19,6 +19,7 @@ import com.mapua.aquajmt.customerapp.api.retrofit.RetroFitApiImpl;
 import com.mapua.aquajmt.customerapp.models.ShopInfo;
 import com.mapua.aquajmt.customerapp.models.ShopSalesInfo;
 import com.mapua.aquajmt.customerapp.utils.DateTimeUtils;
+import com.mapua.aquajmt.customerapp.utils.SharedPref;
 import com.mapua.aquajmt.customerapp.utils.ShopInfoUtils;
 
 import java.util.Locale;
@@ -105,6 +106,8 @@ public class ShopInfoFragment extends Fragment {
         if (shopInfo == null)
             throw new IllegalStateException("The shopInfo cannot be null.");
 
+
+
         txtName.setText(shopInfo.getBusinessName());
         txtAddress.setText(shopInfo.getAddress());
         txtContactNo.setText(shopInfo.getCellphoneNo());
@@ -144,6 +147,8 @@ public class ShopInfoFragment extends Fragment {
             txtOtherContactNo.setText(shopInfo.getAlternateNo());
         else
             txtOtherContactNo.setText(getString(R.string.txt_no_other_contact_no));
+
+        SharedPref.setStringValue(SharedPref.USER,SharedPref.SHOP_ID,shopInfo.getId(),getActivity());
     }
 
     public void setShopSalesInView(ShopSalesInfo shopSalesInfo) {
